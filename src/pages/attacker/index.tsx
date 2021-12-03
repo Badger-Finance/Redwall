@@ -81,9 +81,11 @@ function AttackerInfo(): JSX.Element {
     queryAttacker();
   }, []);
 
+  const atRiskRunds = Object.values(vaultAmounts).reduce((total, value) => total +=value, 0);
+
   return (
     <div className="flex flex-col flex-grow h-full w-full px-4 md:px-12 bg-cave py-16 text-skull">
-      <div className="flex flex-col mb-10">
+      <div className="flex flex-col mb-2">
         <span className="text-lg cursor-default">Badger Exploiter</span>
         <span
           className="text-2xl text-white cursor-pointer"
@@ -95,7 +97,10 @@ function AttackerInfo(): JSX.Element {
         >
           0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107
         </span>
-        <span className="text-md text-raspberry text-bold">
+        <span className="text-xl text-raspberry text-bold tracking-tighter">
+          {formatter.format(atRiskRunds)} user funds at risk
+        </span>
+        <span className="text-md text-skull text-bold">
           {Object.keys(userApprovals).length} affected users
         </span>
       </div>
@@ -110,7 +115,11 @@ function AttackerInfo(): JSX.Element {
             Approvals Overview
           </div>
           <div className="flex flex-wrap justify-around mb-10">
-            {attackerData.cumulativeApprovals.map((approval) => {
+            {attackerData.cumulativeApprovals.sort((a, b) => {
+              const valueA = vaultAmounts[a.token.id] ?? 0;
+              const valueB = vaultAmounts[b.token.id] ?? 0;
+              return valueB - valueA;
+            }).map((approval) => {
               const { token, approvals, revokes } = approval;
               return (
                 <div
