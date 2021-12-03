@@ -4,5 +4,6 @@ fragment ApprovalDayData on ApprovalDayData {
   token {
     ...Token
   }
-  count
+  approvals
+  revokes
 }
