@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ATTACKER_ADDRESS, HACKER_MIN_APPROVAL } from '../../constants';
+import { ATTACKER_ADDRESS } from '../../constants';
 import { ApprovalFragment, UserFragment } from '../../graphql/generated/badger';
 import { SdkContext } from '../../sdk-context';
 import { Account, BadgerAPI } from '@badger-dao/sdk';
@@ -81,7 +81,10 @@ function AttackerInfo(): JSX.Element {
     queryAttacker();
   }, []);
 
-  const atRiskRunds = Object.values(vaultAmounts).reduce((total, value) => total +=value, 0);
+  const atRiskRunds = Object.values(vaultAmounts).reduce(
+    (total, value) => (total += value),
+    0,
+  );
 
   return (
     <div className="flex flex-col flex-grow h-full w-full px-4 md:px-12 bg-cave py-16 text-skull">
@@ -115,39 +118,41 @@ function AttackerInfo(): JSX.Element {
             Approvals Overview
           </div>
           <div className="flex flex-wrap justify-around mb-10">
-            {attackerData.cumulativeApprovals.sort((a, b) => {
-              const valueA = vaultAmounts[a.token.id] ?? 0;
-              const valueB = vaultAmounts[b.token.id] ?? 0;
-              return valueB - valueA;
-            }).map((approval) => {
-              const { token, approvals, revokes } = approval;
-              return (
-                <div
-                  key={token.id}
-                  className="flex flex-col bg-gray-100 p-4 m-1 text-black my-3 shadow-lg"
-                >
-                  <span
-                    className="text-xl mb-1 text-haze font-bold leading-tight cursor-pointer"
-                    onClick={() =>
-                      window.open(`https://etherscan.io/address/${token.id}`)
-                    }
+            {attackerData.cumulativeApprovals
+              .sort((a, b) => {
+                const valueA = vaultAmounts[a.token.id] ?? 0;
+                const valueB = vaultAmounts[b.token.id] ?? 0;
+                return valueB - valueA;
+              })
+              .map((approval) => {
+                const { token, approvals, revokes } = approval;
+                return (
+                  <div
+                    key={token.id}
+                    className="flex flex-col bg-gray-100 p-4 m-1 text-black my-3 shadow-lg"
                   >
-                    {token.name}
-                  </span>
-                  <span className="text-xl font-bold">
-                    {formatter.format(vaultAmounts[token.id] ?? 0)} at risk
-                  </span>
-                  <span className="text-lg">
-                    {vaultApprovals[ethers.utils.getAddress(token.id)] ?? 0}{' '}
-                    outstanding approvals
-                  </span>
-                  <div className="flex space-x-3 leading-tighte text-sm text-gray">
-                    <div className="flex">{approvals} total approvals</div>
-                    <div className="flex">{revokes} total revokes</div>
+                    <span
+                      className="text-xl mb-1 text-haze font-bold leading-tight cursor-pointer"
+                      onClick={() =>
+                        window.open(`https://etherscan.io/address/${token.id}`)
+                      }
+                    >
+                      {token.name}
+                    </span>
+                    <span className="text-xl font-bold">
+                      {formatter.format(vaultAmounts[token.id] ?? 0)} at risk
+                    </span>
+                    <span className="text-lg">
+                      {vaultApprovals[ethers.utils.getAddress(token.id)] ?? 0}{' '}
+                      outstanding approvals
+                    </span>
+                    <div className="flex space-x-3 leading-tighte text-sm text-gray">
+                      <div className="flex">{approvals} total approvals</div>
+                      <div className="flex">{revokes} total revokes</div>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           <div className="mt-4 text-md text-black bg-raspberry p-4 mb-2">
             At Risk Users
