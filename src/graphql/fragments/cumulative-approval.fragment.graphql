@@ -6,5 +6,6 @@ fragment CumulativeApproval on CumulativeApproval {
   spender {
     id
   }
-  count
+  approvals
+  revokes
 }
