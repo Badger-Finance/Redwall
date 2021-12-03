@@ -23,6 +23,7 @@ function AccountRoot(): JSX.Element {
       {accounts.map((acc) => {
         return (
           <div
+            key={acc}
             className="flex p-2 my-1 cursor-pointer"
             onClick={() => window.open(`/accounts/${acc}`)}
           >
