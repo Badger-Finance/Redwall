@@ -14,7 +14,7 @@ const sdk = getSdk(client);
 /* eslint-disable react/jsx-props-no-spreading */
 function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <div className="h-screen">
+    <>
       <Head>
         <meta
           name="viewport"
@@ -22,9 +22,11 @@ function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
         />
       </Head>
       <SdkProvider value={sdk}>
-        <Component {...pageProps} />
+        <div className="flex flex-col min-h-screen">
+          <Component {...pageProps} />
+        </div>
       </SdkProvider>
-    </div>
+    </>
   );
 }
 
