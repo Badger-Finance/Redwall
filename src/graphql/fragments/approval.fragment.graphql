@@ -1,5 +1,6 @@
 fragment Approval on Approval {
   id
+  hash
   timestamp
   token {
     ...Token

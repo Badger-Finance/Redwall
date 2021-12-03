@@ -26,6 +26,7 @@ export type Scalars = {
 export type Approval = Snapshot & {
   __typename?: 'Approval';
   id: Scalars['ID'];
+  hash: Scalars['Bytes'];
   timestamp: Scalars['Int'];
   token: Token;
   owner: User;
@@ -108,6 +109,12 @@ export type Approval_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  hash?: Maybe<Scalars['Bytes']>;
+  hash_not?: Maybe<Scalars['Bytes']>;
+  hash_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_contains?: Maybe<Scalars['Bytes']>;
+  hash_not_contains?: Maybe<Scalars['Bytes']>;
   timestamp?: Maybe<Scalars['Int']>;
   timestamp_not?: Maybe<Scalars['Int']>;
   timestamp_gt?: Maybe<Scalars['Int']>;
@@ -170,6 +177,7 @@ export type Approval_Filter = {
 
 export enum Approval_OrderBy {
   Id = 'id',
+  Hash = 'hash',
   Timestamp = 'timestamp',
   Token = 'token',
   Owner = 'owner',
@@ -927,6 +935,7 @@ export const ApprovalDayDataFragmentDoc = gql`
 export const ApprovalFragmentDoc = gql`
   fragment Approval on Approval {
     id
+    hash
     timestamp
     token {
       ...Token
@@ -1095,7 +1104,7 @@ export type ApprovalDayDataFragment = { __typename?: 'ApprovalDayData' } & Pick<
 
 export type ApprovalFragment = { __typename?: 'Approval' } & Pick<
   Approval,
-  'id' | 'timestamp' | 'amount'
+  'id' | 'hash' | 'timestamp' | 'amount'
 > & {
     token: { __typename?: 'Token' } & TokenFragment;
     owner: { __typename?: 'User' } & Pick<User, 'id'>;
