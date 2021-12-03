@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
         id: '0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107',
       });
 
-      console.log(user);
+      // console.log(user);
     }
 
     async function queryApprovalDayData() {
@@ -42,7 +42,7 @@ export default function Home(): JSX.Element {
         orderDirection: OrderDirection.Desc,
       });
 
-      console.log(approvalDayDatas);
+      // console.log(approvalDayDatas);
     }
 
     queryUserApprovalDayData();
