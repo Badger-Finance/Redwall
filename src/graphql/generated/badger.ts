@@ -26,6 +26,7 @@ export type Scalars = {
 export type Approval = Snapshot & {
   __typename?: 'Approval';
   id: Scalars['ID'];
+  hash: Scalars['Bytes'];
   timestamp: Scalars['Int'];
   token: Token;
   owner: User;
@@ -38,7 +39,8 @@ export type ApprovalDayData = Snapshot & {
   id: Scalars['ID'];
   timestamp: Scalars['Int'];
   token: Token;
-  count: Scalars['BigInt'];
+  approvals: Scalars['BigInt'];
+  revokes: Scalars['BigInt'];
 };
 
 export type ApprovalDayData_Filter = {
@@ -72,21 +74,30 @@ export type ApprovalDayData_Filter = {
   token_not_starts_with?: Maybe<Scalars['String']>;
   token_ends_with?: Maybe<Scalars['String']>;
   token_not_ends_with?: Maybe<Scalars['String']>;
-  count?: Maybe<Scalars['BigInt']>;
-  count_not?: Maybe<Scalars['BigInt']>;
-  count_gt?: Maybe<Scalars['BigInt']>;
-  count_lt?: Maybe<Scalars['BigInt']>;
-  count_gte?: Maybe<Scalars['BigInt']>;
-  count_lte?: Maybe<Scalars['BigInt']>;
-  count_in?: Maybe<Array<Scalars['BigInt']>>;
-  count_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals?: Maybe<Scalars['BigInt']>;
+  approvals_not?: Maybe<Scalars['BigInt']>;
+  approvals_gt?: Maybe<Scalars['BigInt']>;
+  approvals_lt?: Maybe<Scalars['BigInt']>;
+  approvals_gte?: Maybe<Scalars['BigInt']>;
+  approvals_lte?: Maybe<Scalars['BigInt']>;
+  approvals_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes?: Maybe<Scalars['BigInt']>;
+  revokes_not?: Maybe<Scalars['BigInt']>;
+  revokes_gt?: Maybe<Scalars['BigInt']>;
+  revokes_lt?: Maybe<Scalars['BigInt']>;
+  revokes_gte?: Maybe<Scalars['BigInt']>;
+  revokes_lte?: Maybe<Scalars['BigInt']>;
+  revokes_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum ApprovalDayData_OrderBy {
   Id = 'id',
   Timestamp = 'timestamp',
   Token = 'token',
-  Count = 'count',
+  Approvals = 'approvals',
+  Revokes = 'revokes',
 }
 
 export type Approval_Filter = {
@@ -98,6 +109,12 @@ export type Approval_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  hash?: Maybe<Scalars['Bytes']>;
+  hash_not?: Maybe<Scalars['Bytes']>;
+  hash_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  hash_contains?: Maybe<Scalars['Bytes']>;
+  hash_not_contains?: Maybe<Scalars['Bytes']>;
   timestamp?: Maybe<Scalars['Int']>;
   timestamp_not?: Maybe<Scalars['Int']>;
   timestamp_gt?: Maybe<Scalars['Int']>;
@@ -160,6 +177,7 @@ export type Approval_Filter = {
 
 export enum Approval_OrderBy {
   Id = 'id',
+  Hash = 'hash',
   Timestamp = 'timestamp',
   Token = 'token',
   Owner = 'owner',
@@ -178,7 +196,8 @@ export type CumulativeApproval = {
   id: Scalars['ID'];
   token: Token;
   spender: User;
-  count: Scalars['BigInt'];
+  approvals: Scalars['BigInt'];
+  revokes: Scalars['BigInt'];
 };
 
 export type CumulativeApproval_Filter = {
@@ -218,21 +237,30 @@ export type CumulativeApproval_Filter = {
   spender_not_starts_with?: Maybe<Scalars['String']>;
   spender_ends_with?: Maybe<Scalars['String']>;
   spender_not_ends_with?: Maybe<Scalars['String']>;
-  count?: Maybe<Scalars['BigInt']>;
-  count_not?: Maybe<Scalars['BigInt']>;
-  count_gt?: Maybe<Scalars['BigInt']>;
-  count_lt?: Maybe<Scalars['BigInt']>;
-  count_gte?: Maybe<Scalars['BigInt']>;
-  count_lte?: Maybe<Scalars['BigInt']>;
-  count_in?: Maybe<Array<Scalars['BigInt']>>;
-  count_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals?: Maybe<Scalars['BigInt']>;
+  approvals_not?: Maybe<Scalars['BigInt']>;
+  approvals_gt?: Maybe<Scalars['BigInt']>;
+  approvals_lt?: Maybe<Scalars['BigInt']>;
+  approvals_gte?: Maybe<Scalars['BigInt']>;
+  approvals_lte?: Maybe<Scalars['BigInt']>;
+  approvals_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes?: Maybe<Scalars['BigInt']>;
+  revokes_not?: Maybe<Scalars['BigInt']>;
+  revokes_gt?: Maybe<Scalars['BigInt']>;
+  revokes_lt?: Maybe<Scalars['BigInt']>;
+  revokes_gte?: Maybe<Scalars['BigInt']>;
+  revokes_lte?: Maybe<Scalars['BigInt']>;
+  revokes_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum CumulativeApproval_OrderBy {
   Id = 'id',
   Token = 'token',
   Spender = 'spender',
-  Count = 'count',
+  Approvals = 'approvals',
+  Revokes = 'revokes',
 }
 
 export type Erc20 = {
@@ -758,7 +786,8 @@ export type UserApprovalDayData = Snapshot & {
   timestamp: Scalars['Int'];
   spender: User;
   token: Token;
-  count: Scalars['BigInt'];
+  approvals: Scalars['BigInt'];
+  revokes: Scalars['BigInt'];
 };
 
 export type UserApprovalDayData_Filter = {
@@ -806,14 +835,22 @@ export type UserApprovalDayData_Filter = {
   token_not_starts_with?: Maybe<Scalars['String']>;
   token_ends_with?: Maybe<Scalars['String']>;
   token_not_ends_with?: Maybe<Scalars['String']>;
-  count?: Maybe<Scalars['BigInt']>;
-  count_not?: Maybe<Scalars['BigInt']>;
-  count_gt?: Maybe<Scalars['BigInt']>;
-  count_lt?: Maybe<Scalars['BigInt']>;
-  count_gte?: Maybe<Scalars['BigInt']>;
-  count_lte?: Maybe<Scalars['BigInt']>;
-  count_in?: Maybe<Array<Scalars['BigInt']>>;
-  count_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals?: Maybe<Scalars['BigInt']>;
+  approvals_not?: Maybe<Scalars['BigInt']>;
+  approvals_gt?: Maybe<Scalars['BigInt']>;
+  approvals_lt?: Maybe<Scalars['BigInt']>;
+  approvals_gte?: Maybe<Scalars['BigInt']>;
+  approvals_lte?: Maybe<Scalars['BigInt']>;
+  approvals_in?: Maybe<Array<Scalars['BigInt']>>;
+  approvals_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes?: Maybe<Scalars['BigInt']>;
+  revokes_not?: Maybe<Scalars['BigInt']>;
+  revokes_gt?: Maybe<Scalars['BigInt']>;
+  revokes_lt?: Maybe<Scalars['BigInt']>;
+  revokes_gte?: Maybe<Scalars['BigInt']>;
+  revokes_lte?: Maybe<Scalars['BigInt']>;
+  revokes_in?: Maybe<Array<Scalars['BigInt']>>;
+  revokes_not_in?: Maybe<Array<Scalars['BigInt']>>;
 };
 
 export enum UserApprovalDayData_OrderBy {
@@ -821,7 +858,8 @@ export enum UserApprovalDayData_OrderBy {
   Timestamp = 'timestamp',
   Spender = 'spender',
   Token = 'token',
-  Count = 'count',
+  Approvals = 'approvals',
+  Revokes = 'revokes',
 }
 
 export type User_Filter = {
@@ -882,9 +920,22 @@ export const TokenFragmentDoc = gql`
     totalSupply
   }
 `;
+export const ApprovalDayDataFragmentDoc = gql`
+  fragment ApprovalDayData on ApprovalDayData {
+    id
+    timestamp
+    token {
+      ...Token
+    }
+    approvals
+    revokes
+  }
+  ${TokenFragmentDoc}
+`;
 export const ApprovalFragmentDoc = gql`
   fragment Approval on Approval {
     id
+    hash
     timestamp
     token {
       ...Token
@@ -899,19 +950,69 @@ export const ApprovalFragmentDoc = gql`
   }
   ${TokenFragmentDoc}
 `;
+export const CumulativeApprovalFragmentDoc = gql`
+  fragment CumulativeApproval on CumulativeApproval {
+    id
+    token {
+      ...Token
+    }
+    spender {
+      id
+    }
+    approvals
+    revokes
+  }
+  ${TokenFragmentDoc}
+`;
+export const UserFragmentDoc = gql`
+  fragment User on User {
+    id
+    approvals {
+      ...Approval
+    }
+    sentApprovals {
+      ...Approval
+    }
+    cumulativeApprovals {
+      ...CumulativeApproval
+    }
+  }
+  ${ApprovalFragmentDoc}
+  ${CumulativeApprovalFragmentDoc}
+`;
 export const UserApprovalDayDataFragmentDoc = gql`
   fragment UserApprovalDayData on UserApprovalDayData {
     id
     timestamp
     spender {
-      id
+      ...User
     }
     token {
       ...Token
     }
-    count
+    approvals
+    revokes
   }
+  ${UserFragmentDoc}
   ${TokenFragmentDoc}
+`;
+export const ApprovalDayDatasDocument = gql`
+  query ApprovalDayDatas(
+    $first: Int
+    $where: ApprovalDayData_filter
+    $orderBy: ApprovalDayData_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    approvalDayDatas(
+      first: $first
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...ApprovalDayData
+    }
+  }
+  ${ApprovalDayDataFragmentDoc}
 `;
 export const UserApprovalDayDatasDocument = gql`
   query UserApprovalDayDatas(
@@ -931,6 +1032,14 @@ export const UserApprovalDayDatasDocument = gql`
   }
   ${UserApprovalDayDataFragmentDoc}
 `;
+export const UserDocument = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      ...User
+    }
+  }
+  ${UserFragmentDoc}
+`;
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -944,6 +1053,20 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    ApprovalDayDatas(
+      variables?: ApprovalDayDatasQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<ApprovalDayDatasQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ApprovalDayDatasQuery>(
+            ApprovalDayDatasDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'ApprovalDayDatas',
+      );
+    },
     UserApprovalDayDatas(
       variables?: UserApprovalDayDatasQueryVariables,
       requestHeaders?: Dom.RequestInit['headers'],
@@ -958,15 +1081,40 @@ export function getSdk(
         'UserApprovalDayDatas',
       );
     },
+    User(
+      variables: UserQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<UserQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UserQuery>(UserDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'User',
+      );
+    },
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
+export type ApprovalDayDataFragment = { __typename?: 'ApprovalDayData' } & Pick<
+  ApprovalDayData,
+  'id' | 'timestamp' | 'approvals' | 'revokes'
+> & { token: { __typename?: 'Token' } & TokenFragment };
+
 export type ApprovalFragment = { __typename?: 'Approval' } & Pick<
   Approval,
-  'id' | 'timestamp' | 'amount'
+  'id' | 'hash' | 'timestamp' | 'amount'
 > & {
     token: { __typename?: 'Token' } & TokenFragment;
     owner: { __typename?: 'User' } & Pick<User, 'id'>;
+    spender: { __typename?: 'User' } & Pick<User, 'id'>;
+  };
+
+export type CumulativeApprovalFragment = {
+  __typename?: 'CumulativeApproval';
+} & Pick<CumulativeApproval, 'id' | 'approvals' | 'revokes'> & {
+    token: { __typename?: 'Token' } & TokenFragment;
     spender: { __typename?: 'User' } & Pick<User, 'id'>;
   };
 
@@ -977,10 +1125,31 @@ export type TokenFragment = { __typename?: 'Token' } & Pick<
 
 export type UserApprovalDayDataFragment = {
   __typename?: 'UserApprovalDayData';
-} & Pick<UserApprovalDayData, 'id' | 'timestamp' | 'count'> & {
-    spender: { __typename?: 'User' } & Pick<User, 'id'>;
+} & Pick<UserApprovalDayData, 'id' | 'timestamp' | 'approvals' | 'revokes'> & {
+    spender: { __typename?: 'User' } & UserFragment;
     token: { __typename?: 'Token' } & TokenFragment;
   };
+
+export type UserFragment = { __typename?: 'User' } & Pick<User, 'id'> & {
+    approvals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
+    sentApprovals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
+    cumulativeApprovals: Array<
+      { __typename?: 'CumulativeApproval' } & CumulativeApprovalFragment
+    >;
+  };
+
+export type ApprovalDayDatasQueryVariables = Exact<{
+  first?: Maybe<Scalars['Int']>;
+  where?: Maybe<ApprovalDayData_Filter>;
+  orderBy?: Maybe<ApprovalDayData_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+}>;
+
+export type ApprovalDayDatasQuery = { __typename?: 'Query' } & {
+  approvalDayDatas: Array<
+    { __typename?: 'ApprovalDayData' } & ApprovalDayDataFragment
+  >;
+};
 
 export type UserApprovalDayDatasQueryVariables = Exact<{
   first?: Maybe<Scalars['Int']>;
@@ -993,4 +1162,12 @@ export type UserApprovalDayDatasQuery = { __typename?: 'Query' } & {
   userApprovalDayDatas: Array<
     { __typename?: 'UserApprovalDayData' } & UserApprovalDayDataFragment
   >;
+};
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type UserQuery = { __typename?: 'Query' } & {
+  user?: Maybe<{ __typename?: 'User' } & UserFragment>;
 };
