@@ -135,13 +135,15 @@ function AttackerInfo(): JSX.Element {
             return userB - userA;
           }).map((user) => {
             const approvals = userApprovals[user];
+            const atRisk = userAmounts[user] ?? 0;
+            const compromised = atRisk <= 0;
             return (
               <div
                 key={user}
-                className="flex flex-col bg-skull p-2 m-2 text-black"
+                className={"flex flex-col p-2 m-2 text-black" + (compromised ? ' bg-red-200' : ' bg-skull')}
               >
                 <div className="flex w-full justify-between items-center">
-                  <span className="text-lg font-bold p-2">{`${user} • ${formatter.format(userAmounts[user])} at risk`}</span>
+                  <span className="text-lg font-bold p-2">{`${user} • ${formatter.format(atRisk)} at risk${compromised ? ' • [COMPROMISED]' : ''}`}</span>
                   <span className="font-semibold mr-4">
                     {approvals.length} approvals
                   </span>
@@ -152,7 +154,7 @@ function AttackerInfo(): JSX.Element {
                     ? 'Max'
                     : ethers.utils.formatEther(amount);
                   return (
-                    <div key={id} className="flex bg-skull p-2 m-2 text-black">
+                    <div key={id} className="flex p-2 m-2 text-black">
                       <div className="flex flex-col flex-grow cursor-pointer">
                         <span className="font-semibold text-sm text-haze" onClick={() => window.open(`https://etherscan.io/tx/${hash}`)}>
                           {hash}
