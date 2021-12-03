@@ -111,7 +111,7 @@ function AttackerInfo(): JSX.Element {
                   key={token.id}
                   className="flex flex-col bg-gray-100 p-4 m-1 text-black my-3 shadow-lg"
                 >
-                  <span className="text-xl mb-1 text-haze font-bold leading-tight">{token.name}</span>
+                  <span className="text-xl mb-1 text-haze font-bold leading-tight cursor-pointer" onClick={() => window.open(`https://etherscan.io/address/${token.id}`)}>{token.name}</span>
                     <span className="text-xl font-bold">
                       {formatter.format(vaultAmounts[token.id] ?? 0)} at risk
                     </span>
@@ -143,7 +143,7 @@ function AttackerInfo(): JSX.Element {
                 className={"flex flex-col p-2 m-2 text-black" + (compromised ? ' bg-red-200' : ' bg-skull')}
               >
                 <div className="flex w-full justify-between items-center">
-                  <span className="text-lg font-bold p-2">{`${user} • ${formatter.format(atRisk)} at risk${compromised ? ' • [COMPROMISED]' : ''}`}</span>
+                  <span className="text-lg font-bold p-2 cursor-pointer text-haze" onClick={() => window.open(`https://etherscan.io/address/${user}`)}>{`${user} • ${formatter.format(atRisk)} at risk${compromised ? ' • [COMPROMISED]' : ''}`}</span>
                   <span className="font-semibold mr-4">
                     {approvals.length} approvals
                   </span>
@@ -156,7 +156,7 @@ function AttackerInfo(): JSX.Element {
                   return (
                     <div key={id} className="flex p-2 m-2 text-black">
                       <div className="flex flex-col flex-grow cursor-pointer">
-                        <span className="font-semibold text-sm text-haze" onClick={() => window.open(`https://etherscan.io/tx/${hash}`)}>
+                        <span className="font-semibold text-sm text-raspberry" onClick={() => window.open(`https://etherscan.io/tx/${hash}`)}>
                           {hash}
                         </span>
                         <span className="font-semibold text-xs text-cave">
