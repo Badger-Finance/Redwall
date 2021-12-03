@@ -882,6 +882,17 @@ export const TokenFragmentDoc = gql`
     totalSupply
   }
 `;
+export const ApprovalDayDataFragmentDoc = gql`
+  fragment ApprovalDayData on ApprovalDayData {
+    id
+    timestamp
+    token {
+      ...Token
+    }
+    count
+  }
+  ${TokenFragmentDoc}
+`;
 export const ApprovalFragmentDoc = gql`
   fragment Approval on Approval {
     id
@@ -899,19 +910,67 @@ export const ApprovalFragmentDoc = gql`
   }
   ${TokenFragmentDoc}
 `;
+export const CumulativeApprovalFragmentDoc = gql`
+  fragment CumulativeApproval on CumulativeApproval {
+    id
+    token {
+      ...Token
+    }
+    spender {
+      id
+    }
+    count
+  }
+  ${TokenFragmentDoc}
+`;
+export const UserFragmentDoc = gql`
+  fragment User on User {
+    id
+    approvals {
+      ...Approval
+    }
+    sentApprovals {
+      ...Approval
+    }
+    cumulativeApprovals {
+      ...CumulativeApproval
+    }
+  }
+  ${ApprovalFragmentDoc}
+  ${CumulativeApprovalFragmentDoc}
+`;
 export const UserApprovalDayDataFragmentDoc = gql`
   fragment UserApprovalDayData on UserApprovalDayData {
     id
     timestamp
     spender {
-      id
+      ...User
     }
     token {
       ...Token
     }
     count
   }
+  ${UserFragmentDoc}
   ${TokenFragmentDoc}
+`;
+export const ApprovalDayDatasDocument = gql`
+  query ApprovalDayDatas(
+    $first: Int
+    $where: ApprovalDayData_filter
+    $orderBy: ApprovalDayData_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    approvalDayDatas(
+      first: $first
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...ApprovalDayData
+    }
+  }
+  ${ApprovalDayDataFragmentDoc}
 `;
 export const UserApprovalDayDatasDocument = gql`
   query UserApprovalDayDatas(
@@ -931,6 +990,14 @@ export const UserApprovalDayDatasDocument = gql`
   }
   ${UserApprovalDayDataFragmentDoc}
 `;
+export const UserDocument = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      ...User
+    }
+  }
+  ${UserFragmentDoc}
+`;
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
@@ -944,6 +1011,20 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    ApprovalDayDatas(
+      variables?: ApprovalDayDatasQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<ApprovalDayDatasQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<ApprovalDayDatasQuery>(
+            ApprovalDayDatasDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'ApprovalDayDatas',
+      );
+    },
     UserApprovalDayDatas(
       variables?: UserApprovalDayDatasQueryVariables,
       requestHeaders?: Dom.RequestInit['headers'],
@@ -958,15 +1039,40 @@ export function getSdk(
         'UserApprovalDayDatas',
       );
     },
+    User(
+      variables: UserQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<UserQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UserQuery>(UserDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'User',
+      );
+    },
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
+export type ApprovalDayDataFragment = { __typename?: 'ApprovalDayData' } & Pick<
+  ApprovalDayData,
+  'id' | 'timestamp' | 'count'
+> & { token: { __typename?: 'Token' } & TokenFragment };
+
 export type ApprovalFragment = { __typename?: 'Approval' } & Pick<
   Approval,
   'id' | 'timestamp' | 'amount'
 > & {
     token: { __typename?: 'Token' } & TokenFragment;
     owner: { __typename?: 'User' } & Pick<User, 'id'>;
+    spender: { __typename?: 'User' } & Pick<User, 'id'>;
+  };
+
+export type CumulativeApprovalFragment = {
+  __typename?: 'CumulativeApproval';
+} & Pick<CumulativeApproval, 'id' | 'count'> & {
+    token: { __typename?: 'Token' } & TokenFragment;
     spender: { __typename?: 'User' } & Pick<User, 'id'>;
   };
 
@@ -978,9 +1084,30 @@ export type TokenFragment = { __typename?: 'Token' } & Pick<
 export type UserApprovalDayDataFragment = {
   __typename?: 'UserApprovalDayData';
 } & Pick<UserApprovalDayData, 'id' | 'timestamp' | 'count'> & {
-    spender: { __typename?: 'User' } & Pick<User, 'id'>;
+    spender: { __typename?: 'User' } & UserFragment;
     token: { __typename?: 'Token' } & TokenFragment;
   };
+
+export type UserFragment = { __typename?: 'User' } & Pick<User, 'id'> & {
+    approvals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
+    sentApprovals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
+    cumulativeApprovals: Array<
+      { __typename?: 'CumulativeApproval' } & CumulativeApprovalFragment
+    >;
+  };
+
+export type ApprovalDayDatasQueryVariables = Exact<{
+  first?: Maybe<Scalars['Int']>;
+  where?: Maybe<ApprovalDayData_Filter>;
+  orderBy?: Maybe<ApprovalDayData_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+}>;
+
+export type ApprovalDayDatasQuery = { __typename?: 'Query' } & {
+  approvalDayDatas: Array<
+    { __typename?: 'ApprovalDayData' } & ApprovalDayDataFragment
+  >;
+};
 
 export type UserApprovalDayDatasQueryVariables = Exact<{
   first?: Maybe<Scalars['Int']>;
@@ -993,4 +1120,12 @@ export type UserApprovalDayDatasQuery = { __typename?: 'Query' } & {
   userApprovalDayDatas: Array<
     { __typename?: 'UserApprovalDayData' } & UserApprovalDayDataFragment
   >;
+};
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type UserQuery = { __typename?: 'Query' } & {
+  user?: Maybe<{ __typename?: 'User' } & UserFragment>;
 };

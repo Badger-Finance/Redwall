@@ -2,7 +2,7 @@ fragment UserApprovalDayData on UserApprovalDayData {
   id
   timestamp
   spender {
-    id
+    ...User
   }
   token {
     ...Token
