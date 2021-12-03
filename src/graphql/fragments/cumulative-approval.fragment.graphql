@@ -1,0 +1,10 @@
+fragment CumulativeApproval on CumulativeApproval {
+  id
+  token {
+    ...Token
+  }
+  spender {
+    id
+  }
+  count
+}

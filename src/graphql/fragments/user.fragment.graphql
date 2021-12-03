@@ -6,4 +6,7 @@ fragment User on User {
   sentApprovals {
     ...Approval
   }
+  cumulativeApprovals {
+    ...CumulativeApproval
+  }
 }
