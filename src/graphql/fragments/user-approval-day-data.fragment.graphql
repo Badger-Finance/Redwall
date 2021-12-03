@@ -1,0 +1,11 @@
+fragment UserApprovalDayData on UserApprovalDayData {
+  id
+  timestamp
+  spender {
+    id
+  }
+  token {
+    ...Token
+  }
+  count
+}
