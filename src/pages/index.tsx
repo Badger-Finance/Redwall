@@ -32,8 +32,6 @@ export default function Home(): JSX.Element {
       const user = await sdk.User({
         id: '0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107',
       });
-
-      // console.log(user);
     }
 
     async function queryApprovalDayData() {
@@ -41,8 +39,6 @@ export default function Home(): JSX.Element {
         orderBy: ApprovalDayData_OrderBy.Timestamp,
         orderDirection: OrderDirection.Desc,
       });
-
-      // console.log(approvalDayDatas);
     }
 
     queryUserApprovalDayData();
@@ -51,7 +47,7 @@ export default function Home(): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col flex-grow h-full w-full justify-center items-center px-8 md:px-0 py-4">
+    <div className="flex flex-col flex-grow justify-center items-center p-4 overflow-hidden">
       {dailyApprovals && (
         <>
           <h2>Daily Approvals</h2>

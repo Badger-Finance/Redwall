@@ -9,7 +9,12 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  TooltipProps,
 } from 'recharts';
+import {
+  NameType,
+  ValueType,
+} from 'recharts/types/component/DefaultTooltipContent';
 import { UserApprovalDayDataFragment } from '../../graphql/generated/badger';
 import { groupBy } from '../../utils';
 
@@ -80,12 +85,22 @@ function DailyApprovalsChart({ data }: Props): JSX.Element {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="timestamp" />
+        <XAxis
+          dataKey="timestamp"
+          tickFormatter={(timestamp) =>
+            new Date(timestamp * 86400 * 1000).toLocaleDateString('en-US')
+          }
+        />
         <YAxis />
-        <Tooltip />
+        <Tooltip filterNull />
         <Legend />
-        {tokenNames.map((name) => (
-          <Bar dataKey={name} fill={tokenColors[name]} stackId="a" />
+        {tokenNames.map((name, index) => (
+          <Bar
+            key={`${name}_${index}`}
+            dataKey={name}
+            fill={tokenColors[name]}
+            stackId="a"
+          />
         ))}
       </BarChart>
     </ResponsiveContainer>
