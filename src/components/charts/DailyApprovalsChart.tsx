@@ -2,14 +2,12 @@ import React from 'react';
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  TooltipProps,
 } from 'recharts';
 import {
   NameType,
@@ -42,7 +40,7 @@ const tokenColors = {
 };
 
 function DailyApprovalsChart({ data }: Props): JSX.Element {
-  let aggregatedData = [];
+  const aggregatedData = [];
 
   const tokenNames = [...new Set(data.map((entry) => entry.token.symbol))];
   const timestampGrouped = groupBy(data, (data) => data.timestamp);

@@ -44,7 +44,7 @@ export default function Home(): JSX.Element {
     queryUserApprovalDayData();
     queryApprovalDayData();
     queryAttacker();
-  }, []);
+  }, [sdk]);
 
   return (
     <div className="flex flex-col flex-grow justify-center items-center p-4 overflow-hidden">
