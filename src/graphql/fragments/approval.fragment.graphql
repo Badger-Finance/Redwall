@@ -1,0 +1,14 @@
+fragment Approval on Approval {
+  id
+  timestamp
+  token {
+    ...Token
+  }
+  owner {
+    id
+  }
+  spender {
+    id
+  }
+  amount
+}
