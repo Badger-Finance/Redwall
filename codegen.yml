@@ -4,7 +4,7 @@ hooks:
     - prettier --write
 generates:
   src/graphql/generated/badger.ts:
-    schema: https://api.thegraph.com/subgraphs/name/axejintao/jello-jintao
+    schema: https://api.thegraph.com/subgraphs/name/btcookies/badger-sett-approvals
     documents:
       - src/graphql/fragments/approval.fragment.graphql
       - src/graphql/fragments/approval-day-data.fragment.graphql

@@ -34,7 +34,7 @@ function AttackerInfo(): JSX.Element {
         id: (address as string).toLowerCase(),
       });
 
-      if (user) {
+      if (user.user) {
         const attacker = user.user;
         setAttackerData(attacker);
 
@@ -53,7 +53,6 @@ function AttackerInfo(): JSX.Element {
           vaultApprovals[tokenAddress]++;
         });
         setUserApprovals(userApprovals);
-        console.log(vaultApprovals);
         setVaultApprovals(vaultApprovals);
 
         const userAccounts: Record<string, Account> = Object.fromEntries(
@@ -198,8 +197,14 @@ function AttackerInfo(): JSX.Element {
                     </span>
                   </div>
                   {approvals.map((approval) => {
-                    const { amount, id, hash, owner, timestamp, token } =
-                      approval;
+                    const {
+                      amount,
+                      id,
+                      transactionId,
+                      owner,
+                      timestamp,
+                      token,
+                    } = approval;
                     const approvalAmount = BigNumber.from(amount).gte(0)
                       ? 'Max'
                       : ethers.utils.formatEther(amount);
@@ -209,10 +214,12 @@ function AttackerInfo(): JSX.Element {
                           <span
                             className="font-semibold text-sm text-raspberry"
                             onClick={() =>
-                              window.open(`https://etherscan.io/tx/${hash}`)
+                              window.open(
+                                `https://etherscan.io/tx/${transactionId}`,
+                              )
                             }
                           >
-                            {hash}
+                            {transactionId}
                           </span>
                           <span className="font-semibold text-xs text-cave">
                             Approved at{' '}

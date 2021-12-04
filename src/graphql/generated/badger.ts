@@ -26,8 +26,8 @@ export type Scalars = {
 export type Approval = Snapshot & {
   __typename?: 'Approval';
   id: Scalars['ID'];
-  hash: Scalars['Bytes'];
   timestamp: Scalars['Int'];
+  transactionId: Scalars['String'];
   token: Token;
   owner: User;
   spender: User;
@@ -109,12 +109,6 @@ export type Approval_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
-  hash?: Maybe<Scalars['Bytes']>;
-  hash_not?: Maybe<Scalars['Bytes']>;
-  hash_in?: Maybe<Array<Scalars['Bytes']>>;
-  hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
-  hash_contains?: Maybe<Scalars['Bytes']>;
-  hash_not_contains?: Maybe<Scalars['Bytes']>;
   timestamp?: Maybe<Scalars['Int']>;
   timestamp_not?: Maybe<Scalars['Int']>;
   timestamp_gt?: Maybe<Scalars['Int']>;
@@ -123,6 +117,20 @@ export type Approval_Filter = {
   timestamp_lte?: Maybe<Scalars['Int']>;
   timestamp_in?: Maybe<Array<Scalars['Int']>>;
   timestamp_not_in?: Maybe<Array<Scalars['Int']>>;
+  transactionId?: Maybe<Scalars['String']>;
+  transactionId_not?: Maybe<Scalars['String']>;
+  transactionId_gt?: Maybe<Scalars['String']>;
+  transactionId_lt?: Maybe<Scalars['String']>;
+  transactionId_gte?: Maybe<Scalars['String']>;
+  transactionId_lte?: Maybe<Scalars['String']>;
+  transactionId_in?: Maybe<Array<Scalars['String']>>;
+  transactionId_not_in?: Maybe<Array<Scalars['String']>>;
+  transactionId_contains?: Maybe<Scalars['String']>;
+  transactionId_not_contains?: Maybe<Scalars['String']>;
+  transactionId_starts_with?: Maybe<Scalars['String']>;
+  transactionId_not_starts_with?: Maybe<Scalars['String']>;
+  transactionId_ends_with?: Maybe<Scalars['String']>;
+  transactionId_not_ends_with?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
   token_not?: Maybe<Scalars['String']>;
   token_gt?: Maybe<Scalars['String']>;
@@ -177,8 +185,8 @@ export type Approval_Filter = {
 
 export enum Approval_OrderBy {
   Id = 'id',
-  Hash = 'hash',
   Timestamp = 'timestamp',
+  TransactionId = 'transactionId',
   Token = 'token',
   Owner = 'owner',
   Spender = 'spender',
@@ -935,7 +943,7 @@ export const ApprovalDayDataFragmentDoc = gql`
 export const ApprovalFragmentDoc = gql`
   fragment Approval on Approval {
     id
-    hash
+    transactionId
     timestamp
     token {
       ...Token
@@ -1104,7 +1112,7 @@ export type ApprovalDayDataFragment = { __typename?: 'ApprovalDayData' } & Pick<
 
 export type ApprovalFragment = { __typename?: 'Approval' } & Pick<
   Approval,
-  'id' | 'hash' | 'timestamp' | 'amount'
+  'id' | 'transactionId' | 'timestamp' | 'amount'
 > & {
     token: { __typename?: 'Token' } & TokenFragment;
     owner: { __typename?: 'User' } & Pick<User, 'id'>;
