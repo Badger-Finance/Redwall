@@ -1,6 +1,6 @@
 fragment Approval on Approval {
   id
-  hash
+  transactionId
   timestamp
   token {
     ...Token

@@ -34,7 +34,7 @@ function AttackerInfo(): JSX.Element {
         id: (address as string).toLowerCase(),
       });
 
-      if (user) {
+      if (user.user) {
         const attacker = user.user;
         setAttackerData(attacker);
 
@@ -53,7 +53,6 @@ function AttackerInfo(): JSX.Element {
           vaultApprovals[tokenAddress]++;
         });
         setUserApprovals(userApprovals);
-        console.log(vaultApprovals);
         setVaultApprovals(vaultApprovals);
 
         const userAccounts: Record<string, Account> = Object.fromEntries(
