@@ -197,8 +197,14 @@ function AttackerInfo(): JSX.Element {
                     </span>
                   </div>
                   {approvals.map((approval) => {
-                    const { amount, id, hash, owner, timestamp, token } =
-                      approval;
+                    const {
+                      amount,
+                      id,
+                      transactionId,
+                      owner,
+                      timestamp,
+                      token,
+                    } = approval;
                     const approvalAmount = BigNumber.from(amount).gte(0)
                       ? 'Max'
                       : ethers.utils.formatEther(amount);
@@ -208,10 +214,12 @@ function AttackerInfo(): JSX.Element {
                           <span
                             className="font-semibold text-sm text-raspberry"
                             onClick={() =>
-                              window.open(`https://etherscan.io/tx/${hash}`)
+                              window.open(
+                                `https://etherscan.io/tx/${transactionId}`,
+                              )
                             }
                           >
-                            {hash}
+                            {transactionId}
                           </span>
                           <span className="font-semibold text-xs text-cave">
                             Approved at{' '}
