@@ -3,9 +3,6 @@ import { BigNumber } from '@ethersproject/bignumber';
 export const GRAPH_URL =
   'https://api.thegraph.com/subgraphs/name/axejintao/jello-jintao';
 
-export const HACKER_MIN_APPROVAL = BigNumber.from(
-  '0x10000000000000000000000000000000000000000000000000000000000000000',
-);
 export const ATTACKER_ADDRESS = '0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107';
 export const USER_ADDRESSES = [
   '0x3fc3e6514fd4925f55fb3ae17bbfbca2eb126608',
