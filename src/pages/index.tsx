@@ -47,7 +47,7 @@ export default function Home(): JSX.Element {
   }, [sdk]);
 
   return (
-    <div className="flex flex-col flex-grow justify-center items-center p-4 overflow-hidden">
+    <div className="flex flex-col flex-grow justify-center items-center p-4 overflow-hidden min-height-screen">
       {dailyApprovals && (
         <>
           <h2>Daily Approvals</h2>

@@ -22,7 +22,7 @@ function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
         />
       </Head>
       <SdkProvider value={sdk}>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col min-h-screen">
           <Component {...pageProps} />
         </div>
       </SdkProvider>

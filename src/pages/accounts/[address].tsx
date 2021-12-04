@@ -4,6 +4,7 @@ import { ApprovalFragment, UserFragment } from '../../graphql/generated/badger';
 import { SdkContext } from '../../sdk-context';
 import { Account, BadgerAPI } from '@badger-dao/sdk';
 import { BigNumber, ethers } from 'ethers';
+import { useRouter } from 'next/dist/client/router';
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -22,11 +23,15 @@ function AttackerInfo(): JSX.Element {
   );
   const [vaultAmounts, setVaultAmounts] = useState<Record<string, number>>({});
   const [userAmounts, setUserAmounts] = useState<Record<string, number>>({});
+  const [account, setAccount] = useState<Account | null>(null);
+
+  const router = useRouter();
+  const { address } = router.query;
 
   useEffect(() => {
     async function queryAttacker() {
       const user = await sdk.User({
-        id: ATTACKER_ADDRESS,
+        id: (address as string).toLowerCase(),
       });
 
       if (user) {
@@ -76,6 +81,9 @@ function AttackerInfo(): JSX.Element {
         });
         setVaultAmounts(vaultTotals);
         setUserAmounts(userTotals);
+
+        const account = await api.loadAccount(address as string);
+        setAccount(account);
       }
     }
     queryAttacker();
@@ -92,14 +100,15 @@ function AttackerInfo(): JSX.Element {
         <span className="text-lg cursor-default">Badger Exploiter</span>
         <span
           className="text-2xl text-white cursor-pointer"
-          onClick={() =>
-            window.open(
-              'https://etherscan.io/address/0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107',
-            )
-          }
+          onClick={() => window.open(`https://etherscan.io/address/${address}`)}
         >
-          0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107
+          {address}
         </span>
+        {account && (
+          <span className="text-xl text-raspberry text-bold tracking-tighter">
+            {formatter.format(account.value)} address controlled funds
+          </span>
+        )}
         <span className="text-xl text-raspberry text-bold tracking-tighter">
           {formatter.format(atRiskRunds)} user funds at risk
         </span>
@@ -172,7 +181,7 @@ function AttackerInfo(): JSX.Element {
                   key={user}
                   className={
                     'flex flex-col p-2 m-2 text-black' +
-                    (compromised ? ' bg-red-200' : ' bg-skull')
+                    (compromised ? ' bg-red-200' : ' bg-gray-100')
                   }
                 >
                   <div className="flex w-full justify-between items-center">
