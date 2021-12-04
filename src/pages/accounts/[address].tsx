@@ -136,6 +136,11 @@ function AttackerInfo(): JSX.Element {
         <span className="text-md text-skull text-bold">
           {Object.keys(userApprovals).length} affected users
         </span>
+        {attackerData && (
+          <span className="text-md text-skull text-bold">
+            {attackerData.sentApprovals.length} affected approvals
+          </span>
+        )}
       </div>
       {hasStolenFunds && (
         <>
