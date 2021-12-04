@@ -26,8 +26,8 @@ export type Scalars = {
 export type Approval = Snapshot & {
   __typename?: 'Approval';
   id: Scalars['ID'];
+  transactionId: Scalars['Bytes'];
   timestamp: Scalars['Int'];
-  transactionId: Scalars['String'];
   token: Token;
   owner: User;
   spender: User;
@@ -109,6 +109,12 @@ export type Approval_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  transactionId?: Maybe<Scalars['Bytes']>;
+  transactionId_not?: Maybe<Scalars['Bytes']>;
+  transactionId_in?: Maybe<Array<Scalars['Bytes']>>;
+  transactionId_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  transactionId_contains?: Maybe<Scalars['Bytes']>;
+  transactionId_not_contains?: Maybe<Scalars['Bytes']>;
   timestamp?: Maybe<Scalars['Int']>;
   timestamp_not?: Maybe<Scalars['Int']>;
   timestamp_gt?: Maybe<Scalars['Int']>;
@@ -117,20 +123,6 @@ export type Approval_Filter = {
   timestamp_lte?: Maybe<Scalars['Int']>;
   timestamp_in?: Maybe<Array<Scalars['Int']>>;
   timestamp_not_in?: Maybe<Array<Scalars['Int']>>;
-  transactionId?: Maybe<Scalars['String']>;
-  transactionId_not?: Maybe<Scalars['String']>;
-  transactionId_gt?: Maybe<Scalars['String']>;
-  transactionId_lt?: Maybe<Scalars['String']>;
-  transactionId_gte?: Maybe<Scalars['String']>;
-  transactionId_lte?: Maybe<Scalars['String']>;
-  transactionId_in?: Maybe<Array<Scalars['String']>>;
-  transactionId_not_in?: Maybe<Array<Scalars['String']>>;
-  transactionId_contains?: Maybe<Scalars['String']>;
-  transactionId_not_contains?: Maybe<Scalars['String']>;
-  transactionId_starts_with?: Maybe<Scalars['String']>;
-  transactionId_not_starts_with?: Maybe<Scalars['String']>;
-  transactionId_ends_with?: Maybe<Scalars['String']>;
-  transactionId_not_ends_with?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
   token_not?: Maybe<Scalars['String']>;
   token_gt?: Maybe<Scalars['String']>;
@@ -185,8 +177,8 @@ export type Approval_Filter = {
 
 export enum Approval_OrderBy {
   Id = 'id',
-  Timestamp = 'timestamp',
   TransactionId = 'transactionId',
+  Timestamp = 'timestamp',
   Token = 'token',
   Owner = 'owner',
   Spender = 'spender',

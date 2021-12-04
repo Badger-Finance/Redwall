@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ATTACKER_ADDRESS } from '../../constants';
 import { ApprovalFragment, UserFragment } from '../../graphql/generated/badger';
 import { SdkContext } from '../../sdk-context';
-import { Account, BadgerAPI } from '@badger-dao/sdk';
+import { Account, BadgerAPI, PriceSummary } from '@badger-dao/sdk';
 import { BigNumber, ethers } from 'ethers';
 import { useRouter } from 'next/dist/client/router';
 
@@ -14,7 +14,9 @@ const formatter = new Intl.NumberFormat('en-US', {
 function AttackerInfo(): JSX.Element {
   const api = new BadgerAPI();
   const sdk = useContext(SdkContext);
-  const [attackerData, setAttackerData] = useState<UserFragment | null>(null);
+  const [attackerData, setAttackerData] = useState<
+    UserFragment | null | undefined
+  >(undefined);
   const [userApprovals, setUserApprovals] = useState<
     Record<string, ApprovalFragment[]>
   >({});
@@ -24,6 +26,7 @@ function AttackerInfo(): JSX.Element {
   const [vaultAmounts, setVaultAmounts] = useState<Record<string, number>>({});
   const [userAmounts, setUserAmounts] = useState<Record<string, number>>({});
   const [account, setAccount] = useState<Account | null>(null);
+  const [prices, setPrices] = useState<PriceSummary>({});
 
   const router = useRouter();
   const { address } = router.query;
@@ -80,10 +83,15 @@ function AttackerInfo(): JSX.Element {
         });
         setVaultAmounts(vaultTotals);
         setUserAmounts(userTotals);
-
-        const account = await api.loadAccount(address as string);
-        setAccount(account);
+      } else {
+        setAttackerData(null);
       }
+
+      const account = await api.loadAccount(address as string);
+      setAccount(account);
+
+      const prices = await api.loadPrices();
+      setPrices(prices);
     }
     queryAttacker();
   }, []);
@@ -93,6 +101,14 @@ function AttackerInfo(): JSX.Element {
     0,
   );
 
+  const withdrawnFunds = Object.values(account ? account.data : {})
+    .map((item) => {
+      const price = prices[item.address];
+      return price * item.withdrawnBalance;
+    })
+    .reduce((total, value) => (total += value), 0);
+
+  const hasStolenFunds = account && account.value > 0;
   return (
     <div className="flex flex-col flex-grow h-full w-full px-4 md:px-12 bg-cave py-16 text-skull">
       <div className="flex flex-col mb-2">
@@ -104,23 +120,65 @@ function AttackerInfo(): JSX.Element {
           {address}
         </span>
         {account && (
-          <span className="text-xl text-raspberry text-bold tracking-tighter">
-            {formatter.format(account.value)} address controlled funds
-          </span>
+          <>
+            <span className="text-xl text-raspberry text-bold tracking-tighter">
+              {formatter.format(account.value)} address controlled funds
+            </span>
+            <span className="text-xl text-raspberry text-bold tracking-tighter">
+              {formatter.format(isNaN(withdrawnFunds) ? 0 : withdrawnFunds)}{' '}
+              passed through funds
+            </span>
+          </>
         )}
         <span className="text-xl text-raspberry text-bold tracking-tighter">
-          {formatter.format(atRiskRunds)} user funds at risk
+          {formatter.format(atRiskRunds)} access to user controlled funds
         </span>
         <span className="text-md text-skull text-bold">
           {Object.keys(userApprovals).length} affected users
         </span>
       </div>
-      {!attackerData && (
+      {hasStolenFunds && (
+        <>
+          <div className="mt-4 text-md text-black bg-raspberry p-4 mb-2">
+            Address Hodlings
+          </div>
+          {Object.values(account.data).map((vault) => {
+            return (
+              <div
+                key={vault.address}
+                className={'flex flex-col p-2 m-2 text-black bg-gray-100'}
+              >
+                <div className="flex p-2 m-2 text-black">
+                  <div className="flex flex-col flex-grow cursor-pointer">
+                    <span
+                      className="font-semibold text-md"
+                      onClick={() =>
+                        window.open(
+                          `https://etherscan.io/address/${vault.address}`,
+                        )
+                      }
+                    >
+                      {vault.name}
+                    </span>
+                  </div>
+                  <span className="flex items-center mx-4 font-semibold text-md">
+                    {vault.balance.toFixed(5)}
+                  </span>
+                  <span className="flex items-center mx-4 font-semibold text-md">
+                    {formatter.format(vault.value)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+      {!attackerData === undefined && (
         <div className="flex flex-grow w-full h-full text-2xl text-raspberry items-center justify-center">
           <span>Loading Attacker Data</span>
         </div>
       )}
-      {attackerData && (
+      {attackerData && attackerData.sentApprovals.length > 0 && (
         <div className="flex flex-col">
           <div className="mt-4 text-md text-black bg-raspberry p-4 mb-2">
             Approvals Overview
