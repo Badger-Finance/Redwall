@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 
 export const GRAPH_URL =
-  'https://api.thegraph.com/subgraphs/name/btcookies/badger-sett-approvals';
+  'https://api.thegraph.com/subgraphs/name/axejintao/jello-jintao';
 
 export const HACKER_MIN_APPROVAL = BigNumber.from(
   '0x10000000000000000000000000000000000000000000000000000000000000000',
