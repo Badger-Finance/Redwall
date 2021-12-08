@@ -13,6 +13,7 @@ import {
   NameType,
   ValueType,
 } from 'recharts/types/component/DefaultTooltipContent';
+import { TooltipProps } from 'recharts';
 import { UserApprovalDayDataFragment } from '../../graphql/generated/badger';
 import { groupBy } from '../../utils';
 
@@ -21,22 +22,68 @@ interface Props {
 }
 
 const tokenColors = {
-  bcrvRenWSBTC: '#2e98fe',
-  'bUNI-V2': '#96f60f',
-  'btbtc/sbtcCrv': '#956519',
-  bSupercrvRenWBTC: '#25f8a6',
-  'bibbtc/sbtcCRV-f': '#8a1ddf',
-  bSLP: '#6c1261',
-  bcrvRenWBTC: '#6e2570',
-  'bbBTC/sbtcCRV': '#e79968',
-  byvWBTC: '#420f45',
-  bBADGER: '#b44995',
-  'boBTC/sbtcCRV': '#1d06c5',
-  bhCRV: '#568cf',
-  bDIGG: '#13b394',
-  'bpBTC/sbtcCRV': '#c3bf70',
-  bcvxCRV: '#e5a871',
-  bcrv3crypto: '#231cbb',
+  'ibbtc/sbtcCRV-f': '#818eeb',
+  'pBTC/sbtcCRV': '#a74a2a',
+  SLP: '#e41892',
+  crv3crypto: '#eb170f',
+  'btbtc/sbtcCrv': '#9182be',
+  hCRV: '#71fbcd',
+  'bibbtc/sbtcCRV-f': '#83dc5c',
+  DIGG: '#e1763f',
+  bcrvRenWBTC: '#c6e4b0',
+  'tbtc/sbtcCrv': '#d6a565',
+  cvxCRV: '#3f48c4',
+  CVX: '#6c8482',
+  byvWBTC: '#5a4f19',
+  crvRenWBTC: '#88cdd8',
+  'fPmBTC/HBTC': '#18dcbd',
+  BADGER: '#bf478d',
+  'oBTC/sbtcCRV': '#c86c2e',
+  WBTC: '#fca6ba',
+  bBADGER: '#7ca992',
+  crvRenWSBTC: '#171181',
+  bcrvRenWSBTC: '#76cb79',
+  'UNI-V2': '#e7b0c1',
+  crvTricrypto: '#e1d79b',
+  bSLP: '#abc55a',
+  'bBTC/sbtcCRV': '#d7d784',
+  bDIGG: '#87688d',
+  'bUNI-V2': '#948316',
+  bSupercrvRenWBTC: '#18037f',
+  'bbBTC/sbtcCRV': '#1869b3',
+};
+
+const CustomTooltip = ({
+  payload,
+  label,
+}: TooltipProps<ValueType, NameType>) => {
+  if (!payload || payload.length === 0) {
+    return null;
+  }
+
+  const tooltipData = payload[0].payload;
+
+  const statsToDisplay = Object.keys(tooltipData)
+    .filter(
+      (entry) =>
+        entry !== 'timestamp' &&
+        entry !== 'totalApprovals' &&
+        tooltipData[entry] !== '0',
+    )
+    .sort((a, b) => tooltipData[b] - tooltipData[a]);
+
+  return (
+    <ul className="bg-white p-3">
+      <li className="my-2">
+        Total Approvals in day: {tooltipData['totalApprovals']}
+      </li>
+      {statsToDisplay.map((stat) => (
+        <li className="my-2" key={stat}>
+          {stat}: {tooltipData[stat]}
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 function DailyApprovalsChart({ data }: Props): JSX.Element {
@@ -90,7 +137,7 @@ function DailyApprovalsChart({ data }: Props): JSX.Element {
           }
         />
         <YAxis />
-        <Tooltip filterNull />
+        <Tooltip filterNull content={CustomTooltip} />
         <Legend />
         {tokenNames.map((name, index) => (
           <Bar
