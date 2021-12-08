@@ -17,6 +17,7 @@ interface AtRiskItem {
 const data = AT_RISK_DATA as AtRiskItem[];
 const users = [...new Set(data.map((i) => i.victim))];
 const userData: Record<string, AtRiskItem[]> = {};
+
 data.forEach((i) => {
   if (!userData[i.victim]) {
     userData[i.victim] = [];
@@ -27,6 +28,28 @@ data.forEach((i) => {
 function AccountRoot(): JSX.Element {
   const sdk = useContext(SdkContext);
   const [currentUserData, setCurrentUserData] = useState(userData);
+  const [loadedData, setLoadedData] = useState(userData);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (searchedAddress: string) => {
+    if (!searchedAddress) {
+      setSearch(searchedAddress);
+      setCurrentUserData(loadedData);
+      return;
+    }
+
+    const filteredVictimsKeys = Object.keys(loadedData).filter((key) =>
+      loadedData[key].some((entry) => entry.victim.includes(searchedAddress)),
+    );
+
+    const filteredVictims = filteredVictimsKeys.reduce(
+      (obj, key) => ({ ...obj, [key]: loadedData[key] }),
+      {},
+    );
+
+    setSearch(searchedAddress);
+    setCurrentUserData(filteredVictims);
+  };
 
   useEffect(() => {
     async function queryUserData(account: string) {
@@ -47,19 +70,24 @@ function AccountRoot(): JSX.Element {
           ]),
         ),
       );
+
       const newUserData: Record<string, AtRiskItem[]> = {};
       const missingAccounts = [];
-      for (const [key, value] of Object.entries(currentUserData)) {
+
+      for (const [key, value] of Object.entries(loadedData)) {
         const userAddress = ethers.utils.getAddress(key);
         const stillAtRisk = [];
 
         const userAccount = userRecords[userAddress];
+
         if (!userAccount) {
           missingAccounts.push(userAddress);
           continue;
         }
+
         const includedApprovals = new Set();
         const activeApprovals = userAccount.approvals;
+
         for (const approval of value) {
           const isActive = activeApprovals.find((a) => {
             if (Number(a.amount) === 0) {
@@ -80,7 +108,8 @@ function AccountRoot(): JSX.Element {
           newUserData[key] = stillAtRisk;
         }
       }
-      setCurrentUserData(newUserData);
+
+      setLoadedData(newUserData);
     }
     updateAtRiskData();
   }, []);
@@ -89,20 +118,29 @@ function AccountRoot(): JSX.Element {
     <div className="flex flex-col flex-grow h-full w-full px-4 md:px-12 bg-cave py-16 text-gray-100">
       <span className="text-3xl">User Approval Report</span>
       <span className="text-lg text-raspberry font-semibold">
-        {Object.values(currentUserData).flatMap((v) => v).length} poisoned
-        approvals
+        {Object.values(userData).flatMap((v) => v).length} poisoned approvals
       </span>
       <span className="text-lg text-raspberry font-semibold">
-        {Object.keys(currentUserData).length} poisoned accounts
+        {Object.keys(userData).length} poisoned accounts
       </span>
-      <div className="my-2 flex flex-wrap justify-center">
+      <div className="flex sm:mt-4 lg:mt-0 lg:justify-end">
+        <input
+          type="search"
+          placeholder="Search Address"
+          className="text-black p-3"
+          value={search}
+          onChange={(event) => handleSearch(event.target.value)}
+        />
+      </div>
+      <div className="flex flex-wrap gap-4 my-4">
         {users
           .filter((u) => currentUserData[u] && currentUserData[u].length > 0)
+          .sort((a, b) => userData[b].length - userData[a].length)
           .map((acc) => {
             return (
               <div
                 key={acc}
-                className="flex flex-col bg-haze shadow-lg w-full md:w-1/4 m-4 border border-skull text-gray-100 tracking-tight p-3 break-words"
+                className="flex flex-col flex-1 bg-haze shadow-lg w-full border border-skull text-gray-100 tracking-tight p-3 break-words"
               >
                 <div
                   className="text-lg font-semibold"
@@ -113,10 +151,10 @@ function AccountRoot(): JSX.Element {
                   {acc}
                 </div>
                 <span className="text-md">
-                  {currentUserData[acc].length} poisoned approvals
+                  {userData[acc].length} poisoned approvals
                 </span>
                 <div className="flex flex-col items-center p-2 text-black font-semibold">
-                  {currentUserData[acc].map((a) => {
+                  {userData[acc].map((a) => {
                     return (
                       <div
                         key={a.hash}
