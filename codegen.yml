@@ -4,7 +4,24 @@ hooks:
     - prettier --write
 generates:
   dashboard/src/graphql/generated/badger.ts:
-    schema: https://api.thegraph.com/subgraphs/name/axejintao/jello-jintao
+    schema: ${SUBGRAPH_URL}
+    documents:
+      - graphql/fragments/approval.fragment.graphql
+      - graphql/fragments/approval-day-data.fragment.graphql
+      - graphql/fragments/cumulative-approval.fragment.graphql
+      - graphql/fragments/token.fragment.graphql
+      - graphql/fragments/user-approval-day-data.fragment.graphql
+      - graphql/fragments/user.fragment.graphql
+      - graphql/queries/approval-day-datas.query.graphql
+      - graphql/queries/user-approval-day-datas.query.graphql
+      - graphql/queries/user.query.graphql
+    plugins:
+      - typescript
+      - typescript-graphql-request
+      - typescript-operations
+
+  monitor/src/graphql/generated/badger.ts:
+    schema: ${SUBGRAPH_URL}
     documents:
       - graphql/fragments/approval.fragment.graphql
       - graphql/fragments/approval-day-data.fragment.graphql

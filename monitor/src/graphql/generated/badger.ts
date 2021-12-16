@@ -2,9 +2,15 @@ import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -997,25 +1003,16 @@ export const ApprovalDayDatasDocument = gql`
     $orderBy: ApprovalDayData_orderBy
     $orderDirection: OrderDirection
   ) {
-    approvalDayDatas(first: $first, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    approvalDayDatas(
+      first: $first
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
       ...ApprovalDayData
     }
   }
   ${ApprovalDayDataFragmentDoc}
-`;
-export const ApprovalsDocument = gql`
-  query Approvals(
-    $first: Int
-    $where: Approval_filter
-    $orderBy: Approval_orderBy
-    $orderDirection: OrderDirection
-    $block: Block_height
-  ) {
-    approvals(first: $first, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
-      ...Approval
-    }
-  }
-  ${ApprovalFragmentDoc}
 `;
 export const UserApprovalDayDatasDocument = gql`
   query UserApprovalDayDatas(
@@ -1024,7 +1021,12 @@ export const UserApprovalDayDatasDocument = gql`
     $orderBy: UserApprovalDayData_orderBy
     $orderDirection: OrderDirection
   ) {
-    userApprovalDayDatas(first: $first, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
+    userApprovalDayDatas(
+      first: $first
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
       ...UserApprovalDayData
     }
   }
@@ -1046,7 +1048,10 @@ export type SdkFunctionWrapper = <T>(
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
 
-export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+export function getSdk(
+  client: GraphQLClient,
+  withWrapper: SdkFunctionWrapper = defaultWrapper,
+) {
   return {
     ApprovalDayDatas(
       variables?: ApprovalDayDatasQueryVariables,
@@ -1054,21 +1059,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     ): Promise<ApprovalDayDatasQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<ApprovalDayDatasQuery>(ApprovalDayDatasDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
+          client.request<ApprovalDayDatasQuery>(
+            ApprovalDayDatasDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
         'ApprovalDayDatas',
-      );
-    },
-    Approvals(
-      variables?: ApprovalsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<ApprovalsQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<ApprovalsQuery>(ApprovalsDocument, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
-        'Approvals',
       );
     },
     UserApprovalDayDatas(
@@ -1077,17 +1073,24 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     ): Promise<UserApprovalDayDatasQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<UserApprovalDayDatasQuery>(UserApprovalDayDatasDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
+          client.request<UserApprovalDayDatasQuery>(
+            UserApprovalDayDatasDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
         'UserApprovalDayDatas',
       );
     },
-    User(variables: UserQueryVariables, requestHeaders?: Dom.RequestInit['headers']): Promise<UserQuery> {
+    User(
+      variables: UserQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<UserQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<UserQuery>(UserDocument, variables, { ...requestHeaders, ...wrappedRequestHeaders }),
+          client.request<UserQuery>(UserDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
         'User',
       );
     },
@@ -1108,25 +1111,31 @@ export type ApprovalFragment = { __typename?: 'Approval' } & Pick<
     spender: { __typename?: 'User' } & Pick<User, 'id'>;
   };
 
-export type CumulativeApprovalFragment = { __typename?: 'CumulativeApproval' } & Pick<
-  CumulativeApproval,
-  'id' | 'approvals' | 'revokes'
-> & { token: { __typename?: 'Token' } & TokenFragment; spender: { __typename?: 'User' } & Pick<User, 'id'> };
+export type CumulativeApprovalFragment = {
+  __typename?: 'CumulativeApproval';
+} & Pick<CumulativeApproval, 'id' | 'approvals' | 'revokes'> & {
+    token: { __typename?: 'Token' } & TokenFragment;
+    spender: { __typename?: 'User' } & Pick<User, 'id'>;
+  };
 
 export type TokenFragment = { __typename?: 'Token' } & Pick<
   Token,
   'id' | 'name' | 'symbol' | 'decimals' | 'totalSupply'
 >;
 
-export type UserApprovalDayDataFragment = { __typename?: 'UserApprovalDayData' } & Pick<
-  UserApprovalDayData,
-  'id' | 'timestamp' | 'approvals' | 'revokes'
-> & { spender: { __typename?: 'User' } & UserFragment; token: { __typename?: 'Token' } & TokenFragment };
+export type UserApprovalDayDataFragment = {
+  __typename?: 'UserApprovalDayData';
+} & Pick<UserApprovalDayData, 'id' | 'timestamp' | 'approvals' | 'revokes'> & {
+    spender: { __typename?: 'User' } & UserFragment;
+    token: { __typename?: 'Token' } & TokenFragment;
+  };
 
 export type UserFragment = { __typename?: 'User' } & Pick<User, 'id'> & {
     approvals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
     sentApprovals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
-    cumulativeApprovals: Array<{ __typename?: 'CumulativeApproval' } & CumulativeApprovalFragment>;
+    cumulativeApprovals: Array<
+      { __typename?: 'CumulativeApproval' } & CumulativeApprovalFragment
+    >;
   };
 
 export type ApprovalDayDatasQueryVariables = Exact<{
@@ -1137,19 +1146,9 @@ export type ApprovalDayDatasQueryVariables = Exact<{
 }>;
 
 export type ApprovalDayDatasQuery = { __typename?: 'Query' } & {
-  approvalDayDatas: Array<{ __typename?: 'ApprovalDayData' } & ApprovalDayDataFragment>;
-};
-
-export type ApprovalsQueryVariables = Exact<{
-  first?: Maybe<Scalars['Int']>;
-  where?: Maybe<Approval_Filter>;
-  orderBy?: Maybe<Approval_OrderBy>;
-  orderDirection?: Maybe<OrderDirection>;
-  block?: Maybe<Block_Height>;
-}>;
-
-export type ApprovalsQuery = { __typename?: 'Query' } & {
-  approvals: Array<{ __typename?: 'Approval' } & ApprovalFragment>;
+  approvalDayDatas: Array<
+    { __typename?: 'ApprovalDayData' } & ApprovalDayDataFragment
+  >;
 };
 
 export type UserApprovalDayDatasQueryVariables = Exact<{
@@ -1160,11 +1159,15 @@ export type UserApprovalDayDatasQueryVariables = Exact<{
 }>;
 
 export type UserApprovalDayDatasQuery = { __typename?: 'Query' } & {
-  userApprovalDayDatas: Array<{ __typename?: 'UserApprovalDayData' } & UserApprovalDayDataFragment>;
+  userApprovalDayDatas: Array<
+    { __typename?: 'UserApprovalDayData' } & UserApprovalDayDataFragment
+  >;
 };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
-export type UserQuery = { __typename?: 'Query' } & { user?: Maybe<{ __typename?: 'User' } & UserFragment> };
+export type UserQuery = { __typename?: 'Query' } & {
+  user?: Maybe<{ __typename?: 'User' } & UserFragment>;
+};
