@@ -1,0 +1,70 @@
+#####################
+# Interfaces
+#####################
+
+interface ERC20 {
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+  totalSupply: BigInt!
+}
+
+interface Snapshot {
+  id: ID!
+  timestamp: Int!
+}
+
+#####################
+# Entities
+#####################
+
+type Token implements ERC20 @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+  totalSupply: BigInt!
+}
+
+type User @entity {
+  id: ID!
+  approvals: [Approval!]! @derivedFrom(field: "owner")
+  sentApprovals: [Approval!]! @derivedFrom(field: "spender")
+  cumulativeApprovals: [CumulativeApproval!]! @derivedFrom(field: "spender")
+}
+
+type Approval implements Snapshot  @entity {
+  id: ID!
+  transactionId: Bytes!
+  timestamp: Int!
+  token: Token!
+  owner: User!
+  spender: User!
+  amount: BigInt!
+}
+
+type CumulativeApproval @entity {
+  id: ID!
+  token: Token!
+  spender: User!
+  approvals: BigInt!
+  revokes: BigInt!
+}
+
+type ApprovalDayData implements Snapshot @entity {
+  id: ID!
+  timestamp: Int!
+  token: Token!
+  approvals: BigInt!
+  revokes: BigInt!
+}
+
+type UserApprovalDayData implements Snapshot @entity {
+  id: ID!
+  timestamp: Int!
+  spender: User!
+  token: Token!
+  approvals: BigInt!
+  revokes: BigInt!
+}
