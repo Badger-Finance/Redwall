@@ -1,0 +1,242 @@
+specVersion: 0.0.3
+description: "Badger is a decentralized autonomous organization (DAO) with a single purpose: build the products and infrastructure necessary to accelerate Bitcoin as collateral across other blockchains."
+repository: https://github.com/Badger-Finance/badger-subgraph/tree/master/subgraphs/setts
+schema:
+  file: ./schema.graphql
+dataSources:
+  {{#tokens}}
+  - kind: ethereum/contract
+    name: {{ name }}
+    network: {{ chain }}
+    source:
+      address: "{{ address }}"
+      abi: ERC20
+      startBlock: 13500000
+    mapping:
+      kind: ethereum/events
+      language: wasm/assemblyscript
+      apiVersion: 0.0.4
+      entities:
+        - Sett
+        - User
+        - Token
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  {{/tokens}}
+  {{#registry}}
+  - kind: ethereum/contract
+    name: VaultRegistry
+    network: {{ chain }}
+    source:
+      address: "{{ address }}"
+      abi: VaultRegistry
+      startBlock: 13500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - Token
+      abis:
+        - name: VaultRegistry
+          file: ./abis/VaultRegistry.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSett
+          file: ./abis/BadgerSett.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: AddKey(string)
+          handler: handleAddKey
+        - event: AddVersion(string)
+          handler: handleAddVersion
+        - event: NewVault(address,string,address)
+          handler: handleNewVault
+        - event: PromoteVault(address,string,address,uint8)
+          handler: handlePromoteVault
+        - event: RemoveVault(address,string,address)
+          handler: handleRemoveVault
+        - event: DemoteVault(address,string,address,uint8)
+          handler: handleDemoteVault
+        - event: Set(string,address)
+          handler: handleSet
+      file: ./src/handlers/registry-handler.ts
+  {{/registry}}
+  {{#setts}}
+  - kind: ethereum/contract
+    name: {{ name }}
+    network: {{ chain }}
+    source:
+      address: "{{ address }}"
+      abi: BadgerSett
+      startBlock: 13500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - User
+        - Token
+        - UserSettBalance
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSett
+          file: ./abis/BadgerSett.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  {{/setts}}
+  {{#affiliateSetts}}
+  - kind: ethereum/contract
+    name: {{ name }}
+    network: {{ chain }}
+    source:
+      address: "{{ address }}"
+      abi: BadgerAffiliateSett
+      startBlock: 13500000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - User
+        - Token
+        - UserSettBalance
+      abis:
+        - name: BadgerAffiliateSett
+          file: ./abis/BadgerAffiliateSett.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSett
+          file: ./abis/BadgerSett.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  {{/affiliateSetts}}
+  
+templates:
+  - kind: ethereum/contract
+    name: Token
+    network: {{ chain }}
+    source:
+      abi: ERC20
+    mapping:
+      kind: ethereum/events
+      language: wasm/assemblyscript
+      apiVersion: 0.0.4
+      entities:
+        - Sett
+        - User
+        - Token
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  - kind: ethereum/contract
+    name: SettVault
+    network: {{ chain }}
+    source:
+      abi: BadgerSett
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - User
+        - Token
+        - UserSettBalance
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSett
+          file: ./abis/BadgerSett.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  - kind: ethereum/contract
+    name: AffiliateSettVault
+    network: {{ chain }}
+    source:
+      abi: BadgerAffiliateSett
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - User
+        - Token
+        - UserSettBalance
+      abis:
+        - name: BadgerAffiliateSett
+          file: ./abis/BadgerAffiliateSett.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSett
+          file: ./abis/BadgerSett.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts
+  - kind: ethereum/contract
+    name: SettVaultV2
+    network: {{ chain }}
+    source:
+      abi: BadgerSettV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Sett
+        - User
+        - Token
+        - UserSettBalance
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: BadgerSettV2
+          file: ./abis/BadgerSettV2.json
+        - name: BadgerController
+          file: ./abis/BadgerController.json
+        - name: BadgerStrategy
+          file: ./abis/BadgerStrategy.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/handlers/sett-handler.ts

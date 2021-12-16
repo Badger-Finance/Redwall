@@ -1,0 +1,92 @@
+---
+service: approval-monitor
+frameworkVersion: '2'
+useDotenv: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  table:
+    scan: scan-metadata
+    watchlist: watchlist
+
+  dynamodb:
+    stages:
+      - production
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      convertEmptyValues: true
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  stage: production
+  region: us-west-1
+  iam:
+    role:
+      managedPolicies:
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+  versionFunctions: false
+  apiGateway:
+    shouldStartNameWithService: true
+    minimumCompressionSize: 1024
+  environment:
+    # Monitor Definitions
+    MONITOR_ID: ${env:MONITOR_ID}
+    START_BLOCK: ${env:START_BLOCK}
+    WEBHOOK_URL: ${env:WEBHOOK_URL}
+    WEBHOOK_ROLE: ${env:WEBHOOK_ROLE}
+    # Graph Definitions
+    APPROVAL_GRAPH_URL: ${env:APPROVAL_GRAPH_URL}
+    # Table Defintions
+    SCAN_DATA: ${self:custom.table.scan}
+    WATCHLIST_DATA: ${self:custom.table.watchlist}
+
+resources:
+  Resources:
+    scanMetadata:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName:  ${self:custom.table.scan}
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: 'monitor'
+            KeyType: 'HASH'
+          - AttributeName: 'startTime'
+            KeyType: 'RANGE'
+        AttributeDefinitions:
+          - AttributeName: 'monitor'
+            AttributeType: 'S'
+          - AttributeName: 'startTime'
+            AttributeType: 'N'
+
+    watchlist:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.table.watchlist}
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: 'address'
+            KeyType: 'HASH'
+        AttributeDefinitions:
+          - AttributeName: 'address'
+            AttributeType: 'S'
+
+functions:
+  check-approvals:
+    handler: src/monitor.checkTokenApprovals
+    timeout: 55
+    events:
+      - schedule:
+          name: monitor-check-approvals
+          description: 'Check protocol token approvals for suspicious activity'
+          rate: rate(1 minute)
