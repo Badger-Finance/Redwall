@@ -1,7 +1,20 @@
-import { getAccount, getDataMapper, getScanMetadata } from './aws/dynamodb.utils';
-import { MONITOR_ID, START_BLOCK, WEBHOOK_ROLE, WEBHOOK_URL } from './constants';
+import {
+  getAccount,
+  getDataMapper,
+  getScanMetadata,
+} from './aws/dynamodb.utils';
+import {
+  MONITOR_ID,
+  START_BLOCK,
+  WEBHOOK_ROLE,
+  WEBHOOK_URL,
+} from './constants';
 import { ScanMetadata } from './entities/scan-metadata';
-import { ApprovalFragment, Approval_OrderBy, OrderDirection } from './graphql/generated/badger';
+import {
+  ApprovalFragment,
+  Approval_OrderBy,
+  OrderDirection,
+} from './graphql/generated/badger';
 import sdk from './graphql';
 import { vaults, whitelist } from './whitelist';
 import { ethers } from 'ethers';
@@ -43,7 +56,7 @@ export async function checkTokenApprovals() {
         await mapper.put(account);
         const data = await provider.getCode(approval.spender.id);
         if (data === '0x') {
-          await alertAccount(account, approval.transactionId, true);
+          await alertAccount(account, approval.transactionId, false);
         } else {
           await alertAccount(account, approval.transactionId, true);
         }
@@ -65,7 +78,9 @@ export async function checkTokenApprovals() {
   }
 }
 
-async function evaluateStartTimestamp(metadata: ScanMetadata | null): Promise<number> {
+async function evaluateStartTimestamp(
+  metadata: ScanMetadata | null,
+): Promise<number> {
   if (metadata) {
     return metadata.endTime;
   }
@@ -78,11 +93,17 @@ async function evaluateStartTimestamp(metadata: ScanMetadata | null): Promise<nu
   if (!approval || !approval.approvals || approval.approvals.length === 0) {
     throw Error('Unable to process zero approvals graph');
   }
-  console.log(`Starting with ${new Date(approval.approvals[0].timestamp * 1000).toLocaleString()}`);
+  console.log(
+    `Starting with ${new Date(
+      approval.approvals[0].timestamp * 1000,
+    ).toLocaleString()}`,
+  );
   return approval.approvals[0].timestamp;
 }
 
-async function getRecentApprovals(startTime: number): Promise<ApprovalFragment[]> {
+async function getRecentApprovals(
+  startTime: number,
+): Promise<ApprovalFragment[]> {
   const approvals = await sdk.Approvals({
     orderBy: Approval_OrderBy.Timestamp,
     orderDirection: OrderDirection.Asc,
@@ -101,7 +122,11 @@ const webhook = new Webhook(WEBHOOK_URL);
 webhook.setUsername(NAME);
 webhook.setAvatar(image);
 
-async function alertAccount(account: WatchlistAccount, tx: string, isUser = false) {
+async function alertAccount(
+  account: WatchlistAccount,
+  tx: string,
+  isUser = false,
+) {
   const inAlert = isUser || account.dailyApprovals > 5;
   const color = inAlert ? 16715859 : 16754515;
   let message;
@@ -109,12 +134,15 @@ async function alertAccount(account: WatchlistAccount, tx: string, isUser = fals
     if (isUser) {
       message = 'EOA token approval, investigate immediately.';
     } else {
-      message = 'Multiple suspicious or unkwown token approvals, investigate immediately.';
+      message =
+        'Multiple suspicious or unkwown token approvals, investigate immediately.';
     }
   } else {
     message = 'Suspicious token approval, please investigate the contract.';
   }
-  const alertMessage = inAlert ? `${`<@&${WEBHOOK_ROLE}>`}\n${message}` : message;
+  const alertMessage = inAlert
+    ? `${`<@&${WEBHOOK_ROLE}>`}\n${message}`
+    : message;
   await webhook.send(alertMessage);
   const embed = new MessageBuilder()
     .setAuthor(NAME, image)
