@@ -1,0 +1,16 @@
+query Approvals(
+  $first: Int
+  $where: Approval_filter
+  $orderBy: Approval_orderBy
+  $orderDirection: OrderDirection
+  $block: Block_height
+) {
+  approvals(
+    first: $first
+    where: $where
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+  ) {
+    ...Approval
+  }
+}

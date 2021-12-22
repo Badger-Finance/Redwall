@@ -21,7 +21,7 @@ import { ethers } from 'ethers';
 import { WatchlistAccount } from './entities/account';
 import { Webhook, MessageBuilder } from 'discord-webhook-node';
 
-export async function checkTokenApprovals() {
+export async function checkTokenApprovals(): Promise<void> {
   const metadata = await getScanMetadata(MONITOR_ID);
 
   const provider = new ethers.providers.JsonRpcProvider(
