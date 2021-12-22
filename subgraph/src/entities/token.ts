@@ -4,7 +4,7 @@ import { ERC20 } from '../../generated/templates/SettVault/ERC20';
 import { readValue } from './contracts';
 
 export function loadToken(address: Address): Token {
-  let id = address.toHexString();
+  const id = address.toHexString();
 
   // handle scenario where a sett is loaded as a deposit token, sett implements token
   let token = Token.load(id) as Token;
@@ -13,7 +13,7 @@ export function loadToken(address: Address): Token {
     return token;
   }
 
-  let contract = ERC20.bind(address);
+  const contract = ERC20.bind(address);
   token = new Token(id);
   token.name = readValue<string>(contract.try_name(), '');
   token.symbol = readValue<string>(contract.try_symbol(), '');

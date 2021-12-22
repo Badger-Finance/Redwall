@@ -56,7 +56,7 @@ resources:
     scanMetadata:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName:  ${self:custom.table.scan}
+        TableName: ${self:custom.table.scan}
         BillingMode: PAY_PER_REQUEST
         KeySchema:
           - AttributeName: 'monitor'

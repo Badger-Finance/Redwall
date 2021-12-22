@@ -12,9 +12,10 @@ generates:
       - graphql/fragments/token.fragment.graphql
       - graphql/fragments/user-approval-day-data.fragment.graphql
       - graphql/fragments/user.fragment.graphql
+      - graphql/queries/approvals.query.graphql
       - graphql/queries/approval-day-datas.query.graphql
-      - graphql/queries/user-approval-day-datas.query.graphql
       - graphql/queries/user.query.graphql
+      - graphql/queries/user-approval-day-datas.query.graphql
     plugins:
       - typescript
       - typescript-graphql-request
@@ -29,9 +30,10 @@ generates:
       - graphql/fragments/token.fragment.graphql
       - graphql/fragments/user-approval-day-data.fragment.graphql
       - graphql/fragments/user.fragment.graphql
+      - graphql/queries/approvals.query.graphql
       - graphql/queries/approval-day-datas.query.graphql
-      - graphql/queries/user-approval-day-datas.query.graphql
       - graphql/queries/user.query.graphql
+      - graphql/queries/user-approval-day-datas.query.graphql
     plugins:
       - typescript
       - typescript-graphql-request

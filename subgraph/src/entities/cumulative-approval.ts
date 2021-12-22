@@ -8,7 +8,7 @@ export function loadCumulativeApproval(
   spender: Address,
   token: Address,
 ): CumulativeApproval {
-  let id = 'CA-'
+  const id = 'CA-'
     .concat(spender.toHexString())
     .concat('-')
     .concat(token.toHexString());

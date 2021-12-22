@@ -1,0 +1,40 @@
+{
+  "name": "redwall-sentry",
+  "version": "1.0.0",
+  "description": "Redwall Approvals Monitor",
+  "repository": "git@github.com:BadgerFinance/redwall.git",
+  "author": "BadgerDAO",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf ./build",
+    "deploy": "sls deploy --stage production",
+    "dev": "sls offline start",
+    "dev:local": "npx ts-node src/index.ts",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
+  },
+  "dependencies": {
+    "@aws/dynamodb-data-mapper": "^0.7.3",
+    "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "aws-sdk": "^2.913.0",
+    "discord-webhook-node": "^1.1.8",
+    "ethers": "^5.5.2",
+    "graphql": "^15.5.0",
+    "graphql-request": "^3.4.0",
+    "graphql-tag": "^2.12.4",
+    "tslib": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.6.1",
+    "express": "4",
+    "jest": "^26.6.3",
+    "serverless": "^2.43.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^7.0.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "ts-jest": "^26.5.6"
+  }
+}

@@ -7,11 +7,12 @@ import { SdkProvider } from '../sdk-context';
 import { GraphQLClient } from 'graphql-request';
 import { GRAPH_URL } from '../constants';
 import { getSdk } from '../graphql/generated/badger';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
 const client = new GraphQLClient(GRAPH_URL);
 const sdk = getSdk(client);
 
-/* eslint-disable react/jsx-props-no-spreading */
 function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>
@@ -22,8 +23,12 @@ function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
         />
       </Head>
       <SdkProvider value={sdk}>
-        <div className="flex flex-col min-h-screen">
-          <Component {...pageProps} />
+        <div className="flex flex-grow">
+          <Sidebar />
+          <div className="flex flex-col flex-grow">
+            <Header />
+            <Component {...pageProps} />
+          </div>
         </div>
       </SdkProvider>
     </>
