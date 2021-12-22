@@ -1,12 +1,12 @@
 <div> 
-  <img align="right" src="docs/images/protector.png" height="135" />
+  <img align="right" src="docs/images/redwall.png" height="135" />
 </div>
 
 # Redwall
 
-Inspired by the comradery of *The Long Patrol*, the **Redwall** is an open source approvals monitoring and alerting tool that aims to identify potential phishing attacks before they happen. 
+Inspired by the comradery of _The Long Patrol_, the **Redwall** is an open source approvals monitoring and alerting tool that aims to identify potential phishing attacks before they happen.
 
-Redwall consists currently of three components: 
+Redwall consists currently of three components:
 
 - Subgraph
 - UI Dashboard
@@ -18,4 +18,3 @@ The subgraph powers both the dashboard and the monitoring functionality.
 ## Documentation
 
 Instructions for how to setup a development environment and deploy the components of Redwall are available in [Setup Instructions](./docs/setup.md).
-
