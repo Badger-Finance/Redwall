@@ -6,9 +6,8 @@
   },
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "extends": [
-    "next",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
-  "ignorePatterns": [".eslintrc"]
+  "ignorePatterns": [".eslintrc", "generated"]
 }

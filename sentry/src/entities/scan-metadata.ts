@@ -1,4 +1,9 @@
-import { attribute, hashKey, rangeKey, table } from '@aws/dynamodb-data-mapper-annotations';
+import {
+  attribute,
+  hashKey,
+  rangeKey,
+  table,
+} from '@aws/dynamodb-data-mapper-annotations';
 import { SCAN_DATA } from '../constants';
 
 @table(SCAN_DATA)

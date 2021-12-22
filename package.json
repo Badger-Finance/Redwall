@@ -5,15 +5,12 @@
   "workspaces": [
     "subgraph",
     "dashboard",
-    "monitor"
+    "sentry"
   ],
   "scripts": {
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint": "yarn workspaces run lint",
     "build": "yarn workspaces run build",
-    "codegen": "graphql-codegen -r dotenv/config -c codegen.yml",
-    "dev": "next dev",
-    "start": "next start"
+    "codegen": "graphql-codegen -r dotenv/config -c codegen.yml"
   },
   "devDependencies": {
     "@badger-dao/sdk": "^1.0.44",

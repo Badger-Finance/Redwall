@@ -11,7 +11,6 @@ import { getSdk } from '../graphql/generated/badger';
 const client = new GraphQLClient(GRAPH_URL);
 const sdk = getSdk(client);
 
-/* eslint-disable react/jsx-props-no-spreading */
 function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>

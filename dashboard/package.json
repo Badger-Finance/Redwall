@@ -1,0 +1,12 @@
+{
+  "name": "token-approvals",
+  "license": "MIT",
+  "version": "v1.0.0",
+  "author": "BadgerDAO",
+  "scripts": {
+    "dev": "next dev",
+    "start": "next start",
+    "lint": "next lint --fix",
+    "build": "next build"
+  }
+}

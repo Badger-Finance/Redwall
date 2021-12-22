@@ -20,17 +20,29 @@ export function getDataMapper(): DataMapper {
   return new DataMapper({ client });
 }
 
-export async function getScanMetadata(monitor: string): Promise<ScanMetadata | null> {
+export async function getScanMetadata(
+  monitor: string,
+): Promise<ScanMetadata | null> {
   const mapper = getDataMapper();
-  for await (const metadata of mapper.query(ScanMetadata, { monitor }, { limit: 1, scanIndexForward: false })) {
+  for await (const metadata of mapper.query(
+    ScanMetadata,
+    { monitor },
+    { limit: 1, scanIndexForward: false },
+  )) {
     return metadata;
   }
   return null;
 }
 
-export async function getAccount(address: string): Promise<WatchlistAccount | null> {
+export async function getAccount(
+  address: string,
+): Promise<WatchlistAccount | null> {
   const mapper = getDataMapper();
-  for await (const account of mapper.query(WatchlistAccount, { address }, { limit: 1 })) {
+  for await (const account of mapper.query(
+    WatchlistAccount,
+    { address },
+    { limit: 1 },
+  )) {
     return account;
   }
   return null;
