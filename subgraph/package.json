@@ -7,6 +7,7 @@
     "lint": "eslint \"src/**/*.ts\" --fix",
     "codegen": "graph codegen subgraph.yaml",
     "build": "graph build subgraph.yaml",
+    "format": "prettier --write \"src/**/*.ts\"",
     "create-local": "graph create --node http://localhost:8020/ badger-finance/badger-dao-setts",
     "remove-local": "graph remove --node http://localhost:8020/ badger-finance/badger-dao-setts",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 badger-finance/setts",

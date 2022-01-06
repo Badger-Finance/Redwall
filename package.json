@@ -9,8 +9,10 @@
   ],
   "scripts": {
     "lint": "yarn workspaces run lint",
+    "format": "yarn workspaces run format",
     "build": "yarn workspaces run build",
-    "codegen": "graphql-codegen -r dotenv/config -c codegen.yml"
+    "codegen": "graphql-codegen -r dotenv/config -c codegen.yml",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
