@@ -20,5 +20,10 @@
     "deploy:arbitrum": "graph deploy --product hosted-service badger-finance/badger-dao-setts-arbitrum",
     "deploy:xdai": "graph deploy --product hosted-service badger-finance/badger-dao-setts-xdai",
     "deploy:bsc": "graph deploy --product hosted-service badger-finance/badger-dao-setts-bsc"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.21.1",
+    "@graphprotocol/graph-ts": "^0.20.1",
+    "mustache": "^4.2.0"
   }
 }

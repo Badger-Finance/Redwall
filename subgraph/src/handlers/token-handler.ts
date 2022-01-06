@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Approval } from '../../generated/templates/SettVault/BadgerSett';
+import { Approval } from '../../generated/templates/Token/ERC20';
 import { Approval as TokenApproval } from '../../generated/schema';
 import { loadApprovalDayData } from '../entities/approval-day-data';
 import { loadUserApprovalDayData } from '../entities/user-approval-day-data';
@@ -11,10 +11,10 @@ import { loadUser } from '../entities/user';
 const SECONDS_PER_DAY = 86400;
 
 export function handleApproval(event: Approval): void {
-  const timestamp = event.block.timestamp.toI32();
-  const owner = event.params.owner;
-  const spender = event.params.spender;
-  const value = event.params.value;
+  let timestamp = event.block.timestamp.toI32();
+  let owner = event.params.owner;
+  let spender = event.params.spender;
+  let value = event.params.value;
   handleSettApproval(
     timestamp,
     event.transaction.hash,
@@ -33,7 +33,7 @@ export function handleSettApproval(
   spender: Address,
   amount: BigInt,
 ): void {
-  const id = owner
+  let id = owner
     .toHexString()
     .concat('-')
     .concat(spender.toHexString())
@@ -57,10 +57,10 @@ export function handleSettApproval(
   approval.amount = amount;
   approval.save();
 
-  const day = timestamp / SECONDS_PER_DAY;
-  const approvalDayData = loadApprovalDayData(day, token);
-  const userApprovalDayData = loadUserApprovalDayData(day, spender, token);
-  const cumulativeApproval = loadCumulativeApproval(spender, token);
+  let day = timestamp / SECONDS_PER_DAY;
+  let approvalDayData = loadApprovalDayData(day, token);
+  let userApprovalDayData = loadUserApprovalDayData(day, spender, token);
+  let cumulativeApproval = loadCumulativeApproval(spender, token);
 
   if (amount.gt(ZERO)) {
     if (!existingApproval) {
