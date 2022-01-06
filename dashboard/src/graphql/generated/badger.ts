@@ -1035,6 +1035,25 @@ export const ApprovalsDocument = gql`
   }
   ${ApprovalFragmentDoc}
 `;
+export const CumulativeApprovalsDocument = gql`
+  query CumulativeApprovals(
+    $first: Int
+    $where: CumulativeApproval_filter
+    $orderBy: CumulativeApproval_orderBy
+    $orderDirection: OrderDirection
+    $block: Block_height
+  ) {
+    cumulativeApprovals(
+      first: $first
+      where: $where
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...CumulativeApproval
+    }
+  }
+  ${CumulativeApprovalFragmentDoc}
+`;
 export const UserApprovalDayDatasDocument = gql`
   query UserApprovalDayDatas(
     $first: Int
@@ -1099,6 +1118,20 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         'Approvals',
+      );
+    },
+    CumulativeApprovals(
+      variables?: CumulativeApprovalsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers'],
+    ): Promise<CumulativeApprovalsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CumulativeApprovalsQuery>(
+            CumulativeApprovalsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'CumulativeApprovals',
       );
     },
     UserApprovalDayDatas(
@@ -1364,6 +1397,33 @@ export type ApprovalsQuery = {
       totalSupply: any;
     };
     owner: { __typename?: 'User'; id: string };
+    spender: { __typename?: 'User'; id: string };
+  }>;
+};
+
+export type CumulativeApprovalsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CumulativeApproval_Filter>;
+  orderBy?: InputMaybe<CumulativeApproval_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  block?: InputMaybe<Block_Height>;
+}>;
+
+export type CumulativeApprovalsQuery = {
+  __typename?: 'Query';
+  cumulativeApprovals: Array<{
+    __typename?: 'CumulativeApproval';
+    id: string;
+    approvals: any;
+    revokes: any;
+    token: {
+      __typename?: 'Token';
+      id: string;
+      name: string;
+      symbol: string;
+      decimals: any;
+      totalSupply: any;
+    };
     spender: { __typename?: 'User'; id: string };
   }>;
 };

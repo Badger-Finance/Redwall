@@ -1,0 +1,16 @@
+query CumulativeApprovals(
+  $first: Int
+  $where: CumulativeApproval_filter
+  $orderBy: CumulativeApproval_orderBy
+  $orderDirection: OrderDirection
+  $block: Block_height
+) {
+  cumulativeApprovals(
+    first: $first
+    where: $where
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+  ) {
+    ...CumulativeApproval
+  }
+}

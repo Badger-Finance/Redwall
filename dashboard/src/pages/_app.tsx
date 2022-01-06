@@ -8,7 +8,8 @@ import { GraphQLClient } from 'graphql-request';
 import { GRAPH_URL } from '../constants';
 import { getSdk } from '../graphql/generated/badger';
 import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
+import { Web3ReactProvider } from '@web3-react/core';
+import { getLibrary } from '../config/web3/library.config';
 
 const client = new GraphQLClient(GRAPH_URL);
 const sdk = getSdk(client);
@@ -22,15 +23,14 @@ function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
         />
       </Head>
-      <SdkProvider value={sdk}>
-        <div className="flex flex-grow">
-          <Sidebar />
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <SdkProvider value={sdk}>
           <div className="flex flex-col flex-grow">
             <Header />
             <Component {...pageProps} />
           </div>
-        </div>
-      </SdkProvider>
+        </SdkProvider>
+      </Web3ReactProvider>
     </>
   );
 }
