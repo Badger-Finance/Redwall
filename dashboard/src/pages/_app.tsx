@@ -25,7 +25,7 @@ function ApprovalsTracker({ Component, pageProps }: AppProps): JSX.Element {
       </Head>
       <Web3ReactProvider getLibrary={getLibrary}>
         <SdkProvider value={sdk}>
-          <div className="flex flex-col flex-grow">
+          <div className="flex flex-col flex-grow bg-slate min-h-screen text-white">
             <Header />
             <Component {...pageProps} />
           </div>

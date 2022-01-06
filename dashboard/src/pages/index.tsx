@@ -45,7 +45,6 @@ export default function Home(): JSX.Element {
           orderBy: UserApprovalDayData_OrderBy.Approvals,
           orderDirection: OrderDirection.Desc,
         });
-        console.log(todayApprovals);
         if (todayApprovals.userApprovalDayDatas) {
           setTodayApprovals(todayApprovals.userApprovalDayDatas);
         }
@@ -55,14 +54,38 @@ export default function Home(): JSX.Element {
   }, [timeframe]);
 
   return (
-    <div className="flex flex-grow flex-col items-center justify-center my-6">
+    <div className="flex flex-grow flex-col items-center my-6">
       <div className="flex flex-col w-3/4">
+        <div className="flex justify-between">
+          <div className="text-xl">{`${
+            timeframe === Timeframe.Today ? 'Todays' : 'Total'
+          } Token Approvals`}</div>
+          <div className="flex items-center space-x-2 w-1/12">
+            <label className="relative inline-block">
+              <input
+                type="checkbox"
+                role="switch"
+                checked={timeframe === Timeframe.Today}
+                onChange={() =>
+                  setTimeFrame(
+                    timeframe === Timeframe.Today
+                      ? Timeframe.Lifetime
+                      : Timeframe.Today,
+                  )
+                }
+              />
+              <span className="absolute" />
+            </label>
+            <span>
+              {timeframe.charAt(0).toUpperCase() + timeframe.slice(1)}
+            </span>
+          </div>
+        </div>
         {timeframe === Timeframe.Today && (
           <>
-            <div className="text-xl">Todays Token Approvals</div>
             {todayApprovals.length > 0 && (
               <div className="w-full mt-4">
-                <div className="flex items-center justify-center border-b mb-2 pb-1">
+                <div className="flex items-center justify-center border-b mb-2 pb-1 w-full">
                   <div className="w-2/6">Spender</div>
                   <div className="w-2/6">Token</div>
                   <div className="w-1/6">Approvals</div>
@@ -93,7 +116,6 @@ export default function Home(): JSX.Element {
         )}
         {timeframe === Timeframe.Lifetime && (
           <>
-            <div className="text-xl">Total Token Approvals</div>
             {totalApprovals.length > 0 && (
               <div className="w-full mt-4">
                 <div className="flex items-center justify-center border-b mb-2 pb-1">
