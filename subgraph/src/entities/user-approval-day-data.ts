@@ -9,7 +9,7 @@ export function loadUserApprovalDayData(
   spender: Address,
   token: Address,
 ): UserApprovalDayData {
-  const id = 'UADD-'
+  let id = 'UADD-'
     .concat(day.toString())
     .concat('-')
     .concat(token.toHexString());

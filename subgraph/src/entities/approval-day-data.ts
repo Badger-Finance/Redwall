@@ -4,7 +4,7 @@ import { ZERO } from '../constants';
 import { loadToken } from './token';
 
 export function loadApprovalDayData(day: i32, token: Address): ApprovalDayData {
-  const id = 'ADD-'
+  let id = 'ADD-'
     .concat(day.toString())
     .concat('-')
     .concat(token.toHexString());
