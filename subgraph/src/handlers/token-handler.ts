@@ -11,10 +11,10 @@ import { loadUser } from '../entities/user';
 const SECONDS_PER_DAY = 86400;
 
 export function handleApproval(event: Approval): void {
-  let timestamp = event.block.timestamp.toI32();
-  let owner = event.params.owner;
-  let spender = event.params.spender;
-  let value = event.params.value;
+  const timestamp = event.block.timestamp.toI32();
+  const owner = event.params.owner;
+  const spender = event.params.spender;
+  const value = event.params.value;
   handleSettApproval(
     timestamp,
     event.transaction.hash,
@@ -33,7 +33,7 @@ export function handleSettApproval(
   spender: Address,
   amount: BigInt,
 ): void {
-  let id = owner
+  const id = owner
     .toHexString()
     .concat('-')
     .concat(spender.toHexString())
@@ -57,10 +57,10 @@ export function handleSettApproval(
   approval.amount = amount;
   approval.save();
 
-  let day = timestamp / SECONDS_PER_DAY;
-  let approvalDayData = loadApprovalDayData(day, token);
-  let userApprovalDayData = loadUserApprovalDayData(day, spender, token);
-  let cumulativeApproval = loadCumulativeApproval(spender, token);
+  const day = timestamp / SECONDS_PER_DAY;
+  const approvalDayData = loadApprovalDayData(day, token);
+  const userApprovalDayData = loadUserApprovalDayData(day, spender, token);
+  const cumulativeApproval = loadCumulativeApproval(spender, token);
 
   if (amount.gt(ZERO)) {
     if (!existingApproval) {

@@ -3,7 +3,7 @@ hooks:
   afterAllFileWrite:
     - prettier --write
 generates:
-  dashboard/src/graphql/generated/badger.ts:
+  dashboard/src/graphql/generated/approvals.ts:
     schema: ${SUBGRAPH_URL}
     documents:
       - graphql/fragments/approval.fragment.graphql
@@ -16,12 +16,13 @@ generates:
       - graphql/queries/approval-day-datas.query.graphql
       - graphql/queries/user.query.graphql
       - graphql/queries/user-approval-day-datas.query.graphql
+      - graphql/queries/cumulative-approvals.query.graphql
     plugins:
       - typescript
       - typescript-graphql-request
       - typescript-operations
 
-  monitor/src/graphql/generated/badger.ts:
+  monitor/src/graphql/generated/approvals.ts:
     schema: ${SUBGRAPH_URL}
     documents:
       - graphql/fragments/approval.fragment.graphql
